@@ -237,3 +237,18 @@ def test_should_write_some_example_variables_in_variables_json_file():
             "example_json_variable": {"foo": "bar", "baz": 42},
             "example_array_variable": ["lorem", "ipsum"],
         }
+
+
+def test_should_create_docker_compose_manual_testing_yml_file_in_docker_base_folder():
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generate(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        docker_compose_manual_testing_yml_file_path = (
+            Path(temp_dir) / "docker" / "docker-compose-manual-testing.yml"
+        )
+
+        assert docker_compose_manual_testing_yml_file_path.exists()
