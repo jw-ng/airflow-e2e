@@ -254,6 +254,43 @@ def test_should_create_docker_compose_manual_testing_yml_file_in_docker_base_fol
         assert docker_compose_manual_testing_yml_file_path.exists()
 
 
+def test_should_create_envrc_file_in_docker_base_folder():
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generate(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        envrc_file_path = Path(temp_dir) / "docker" / ".envrc"
+
+        assert envrc_file_path.exists()
+
+
+def test_should_setup_correct_template_in_envrc_file():
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generate(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        envrc_file_path = Path(temp_dir) / "docker" / ".envrc"
+
+        with envrc_file_path.open() as f:
+            actual = f.read()
+
+        expected_envrc_file_path = (
+            Path(__file__).resolve().parent
+            / "resources"
+            / "expected_envrc"
+        )
+        with expected_envrc_file_path.open() as f:
+            expected = f.read()
+
+        assert actual == expected
+
+
 def test_should_set_current_working_directory_as_default_working_directory_when_not_specified(
     mocker,
 ):

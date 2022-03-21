@@ -71,6 +71,8 @@ def generate(dags: str, tests: str, working_dir: str = None):
         docker_folder_path=docker_folder_path
     )
 
+    _setup_envrc_file(docker_folder_path)
+
 
 def _setup_docker_compose_file(
     template_file_name: str,
@@ -126,5 +128,18 @@ def _create_seeder_template_file(
         template = template_file.read()
 
     output_file_path = seeder_base_folder_path / output_file_name
+    with output_file_path.open(mode="w") as f:
+        f.write(template)
+
+
+def _setup_envrc_file(docker_folder_path: Path):
+    envrc_template_file_path = (
+        REPO_ROOT_DIR_PATH / TEMPLATES_FOLDER_NAME / ".envrc.template"
+    )
+
+    with envrc_template_file_path.open(mode="r") as template_file:
+        template = template_file.read()
+
+    output_file_path = docker_folder_path / ".envrc"
     with output_file_path.open(mode="w") as f:
         f.write(template)
