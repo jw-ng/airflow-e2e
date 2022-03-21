@@ -130,7 +130,7 @@ GNU GENERAL PUBLIC LICENSE v3
 To run the tests, run the following command at the root of the repository:
 
 ```shell
-python3 -m pytest -vvv
+make test
 ```
 
 ## Contributing
