@@ -3,49 +3,16 @@ import typing
 from pathlib import Path
 from string import Template
 
-DOCKER_FOLDER_NAME = "docker"
-
-REPO_ROOT_DIR_PATH = Path(__file__).resolve().parent.parent.parent
-TEMPLATES_FOLDER_NAME = "templates"
-
-DAGS_FOLDER_TEMPLATE_STRING = "DAGS_FOLDER"
-TESTS_FOLDER_TEMPLATE_STRING = "TESTS_FOLDER"
-
-DOCKER_COMPOSE_YML_FILE_NAME = "docker-compose.yml"
-DOCKER_COMPOSE_YML_TEMPLATE_FILE_NAME = f"{DOCKER_COMPOSE_YML_FILE_NAME}.template"
-
-DOCKER_COMPOSE_TESTS_YML_FILE_NAME = "docker-compose-tests.yml"
-DOCKER_COMPOSE_TESTS_YML_TEMPLATE_FILE_NAME = (
-    f"{DOCKER_COMPOSE_TESTS_YML_FILE_NAME}.template"
+from airflow_e2e.generator.constants import (
+    AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME,
+    DAGS_FOLDER_TEMPLATE_STRING,
+    DOCKER_FOLDER_NAME,
+    REPO_ROOT_DIR_PATH,
+    SEEDER_TEMPLATE_MAP,
+    TEMPLATES_FOLDER_NAME,
+    TEMPLATE_MAP,
+    TESTS_FOLDER_TEMPLATE_STRING,
 )
-
-DOCKER_COMPOSE_DEV_YML_FILE_NAME = "docker-compose-dev.yml"
-DOCKER_COMPOSE_DEV_YML_TEMPLATE_FILE_NAME = (
-    f"{DOCKER_COMPOSE_DEV_YML_FILE_NAME}.template"
-)
-
-DOCKER_COMPOSE_MANUAL_TESTING_YML_FILE_NAME = "docker-compose-manual-testing.yml"
-DOCKER_COMPOSE_MANUAL_TESTING_YML_TEMPLATE_FILE_NAME = (
-    f"{DOCKER_COMPOSE_MANUAL_TESTING_YML_FILE_NAME}.template"
-)
-
-
-TEMPLATE_MAP = {
-    DOCKER_COMPOSE_YML_TEMPLATE_FILE_NAME: DOCKER_COMPOSE_YML_FILE_NAME,
-    DOCKER_COMPOSE_TESTS_YML_TEMPLATE_FILE_NAME: DOCKER_COMPOSE_TESTS_YML_FILE_NAME,
-    DOCKER_COMPOSE_DEV_YML_TEMPLATE_FILE_NAME: DOCKER_COMPOSE_DEV_YML_FILE_NAME,
-    DOCKER_COMPOSE_MANUAL_TESTING_YML_TEMPLATE_FILE_NAME: DOCKER_COMPOSE_MANUAL_TESTING_YML_FILE_NAME,
-}
-
-AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME = (
-    "airflow-connections-and-variables-seeder"
-)
-
-CONNECTIONS_YML_TEMPLATE_FILE_NAME = "connections.yml.template"
-CONNECTIONS_YML_FILE_NAME = "connections.yml"
-
-VARIABLES_JSON_TEMPLATE_FILE_NAME = "variables.json.template"
-VARIABLES_JSON_FILE_NAME = "variables.json"
 
 
 def generate(dags: str, tests: str, working_dir: str = None):
@@ -100,12 +67,7 @@ def _setup_airflow_connections_and_variables_seeder_folder(docker_folder_path: P
         parents=True, exist_ok=True
     )
 
-    seeder_template_map = {
-        CONNECTIONS_YML_TEMPLATE_FILE_NAME: CONNECTIONS_YML_FILE_NAME,
-        VARIABLES_JSON_TEMPLATE_FILE_NAME: VARIABLES_JSON_FILE_NAME,
-    }
-
-    for template_file_name, output_file_name in seeder_template_map.items():
+    for template_file_name, output_file_name in SEEDER_TEMPLATE_MAP.items():
         _create_seeder_template_file(
             template_file_name=template_file_name,
             output_file_name=output_file_name,
