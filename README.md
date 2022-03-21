@@ -131,4 +131,4 @@ make test
 
 ## Changelog
 
-Refer to [CHANGELOG.md](./CHANGELOG.md)
+Refer to [CHANGELOG.md](https://github.com/jw-ng/airflow-e2e/blob/main/CHANGELOG.md)
