@@ -7,9 +7,8 @@ from airflow_e2e.generator.constants import (
     AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME,
     DAGS_FOLDER_TEMPLATE_STRING,
     DOCKER_FOLDER_NAME,
-    REPO_ROOT_DIR_PATH,
     SEEDER_TEMPLATE_MAP,
-    TEMPLATES_FOLDER_NAME,
+    TEMPLATES_DIR_PATH,
     TEMPLATE_MAP,
     TESTS_FOLDER_TEMPLATE_STRING,
 )
@@ -47,9 +46,7 @@ def _setup_docker_compose_file(
     docker_folder_path: Path,
     substitutions: typing.Dict[str, str],
 ):
-    docker_compose_yml_template_file_path = (
-        REPO_ROOT_DIR_PATH / TEMPLATES_FOLDER_NAME / template_file_name
-    )
+    docker_compose_yml_template_file_path = TEMPLATES_DIR_PATH / template_file_name
     with docker_compose_yml_template_file_path.open(mode="r") as template_file:
         docker_compose_yml_template = Template(template_file.read())
 
@@ -81,8 +78,7 @@ def _create_seeder_template_file(
     seeder_base_folder_path: Path,
 ):
     seeder_template_file_path = (
-        REPO_ROOT_DIR_PATH
-        / TEMPLATES_FOLDER_NAME
+        TEMPLATES_DIR_PATH
         / AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME
         / template_file_name
     )
@@ -95,9 +91,7 @@ def _create_seeder_template_file(
 
 
 def _setup_envrc_file(docker_folder_path: Path):
-    envrc_template_file_path = (
-        REPO_ROOT_DIR_PATH / TEMPLATES_FOLDER_NAME / ".envrc.template"
-    )
+    envrc_template_file_path = TEMPLATES_DIR_PATH / ".envrc.template"
 
     with envrc_template_file_path.open(mode="r") as template_file:
         template = template_file.read()
