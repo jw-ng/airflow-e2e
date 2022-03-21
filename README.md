@@ -15,10 +15,10 @@ pip install airflow-e2e
 Before generating and running the E2E test scripts, the following files are required to
 be present in your repository:
 
-0. A `requirements.txt` file at the root of your repository, which contains all
+1. A `requirements.txt` file at the root of your repository, which contains all
    Python packages required by your Airflow scheduler and workers to perform the
    tasks under tests
-1. A `requirements-dev.txt` file at the root of your repository, which contains
+2. A `requirements-dev.txt` file at the root of your repository, which contains
    all the Python pacakges required by the test runner to run you E2E test 
    suite(s)
 3. A folder that contains the Airflow DAGs under test
@@ -117,10 +117,6 @@ Or, if you have copied the convenient `make` command from before, you can run:
 make e2e
 ```
 
-## Documentation
-
-W.I.P.
-
 ## License
 
 GNU GENERAL PUBLIC LICENSE v3
@@ -132,8 +128,6 @@ To run the tests, run the following command at the root of the repository:
 ```shell
 make test
 ```
-
-## Contributing
 
 ## Changelog
 
