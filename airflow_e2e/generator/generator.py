@@ -7,6 +7,8 @@ from airflow_e2e.generator.constants import (
     AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME,
     DAGS_FOLDER_TEMPLATE_STRING,
     DOCKER_FOLDER_NAME,
+    ENVRC_FILE_NAME,
+    ENVRC_TEMPLATE_FILE_NAME,
     SEEDER_TEMPLATE_MAP,
     TEMPLATES_DIR_PATH,
     TEMPLATE_MAP,
@@ -91,11 +93,11 @@ def _create_seeder_template_file(
 
 
 def _setup_envrc_file(docker_folder_path: Path):
-    envrc_template_file_path = TEMPLATES_DIR_PATH / ".envrc.template"
+    envrc_template_file_path = TEMPLATES_DIR_PATH / ENVRC_TEMPLATE_FILE_NAME
 
     with envrc_template_file_path.open(mode="r") as template_file:
         template = template_file.read()
 
-    output_file_path = docker_folder_path / ".envrc"
+    output_file_path = docker_folder_path / ENVRC_FILE_NAME
     with output_file_path.open(mode="w") as f:
         f.write(template)
