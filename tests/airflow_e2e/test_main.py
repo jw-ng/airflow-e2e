@@ -8,7 +8,7 @@ def test_should_output_where_e2e_test_scripts_are_generated(mocker):
     mocker.patch("airflow_e2e.__main__.generate")
     mocker.patch("airflow_e2e.__main__.os.getcwd", return_value="ROOT_OF_REPO")
 
-    spy_print = mocker.patch("builtins.print")
+    spy_print = mocker.patch("airflow_e2e.__main__.print_to_screen")
 
     main()
 
@@ -21,7 +21,7 @@ def test_should_output_convenient_make_commands(mocker):
     mocker.patch("airflow_e2e.__main__.parser.parse")
     mocker.patch("airflow_e2e.__main__.generate")
 
-    spy_print = mocker.patch("builtins.print")
+    spy_print = mocker.patch("airflow_e2e.__main__.print_to_screen")
 
     main()
 
@@ -66,7 +66,7 @@ def test_should_output_basic_usage_instructions_at_the_end(mocker):
     mocker.patch("airflow_e2e.__main__.parser.parse")
     mocker.patch("airflow_e2e.__main__.generate")
 
-    spy_print = mocker.patch("builtins.print")
+    spy_print = mocker.patch("airflow_e2e.__main__.print_to_screen")
 
     main()
 
