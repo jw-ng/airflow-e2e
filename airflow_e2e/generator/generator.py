@@ -5,7 +5,7 @@ from string import Template
 
 DOCKER_FOLDER_NAME = "docker"
 
-REPO_ROOT_DIR_PATH = Path(__file__).resolve().parent.parent
+REPO_ROOT_DIR_PATH = Path(__file__).resolve().parent.parent.parent
 TEMPLATES_FOLDER_NAME = "templates"
 
 DAGS_FOLDER_TEMPLATE_STRING = "DAGS_FOLDER"

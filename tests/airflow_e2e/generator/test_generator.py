@@ -2,12 +2,12 @@ import json
 import tempfile
 from pathlib import Path
 
-from airflow_e2e.generator import generate
+from airflow_e2e.generator import generator
 
 
 def test_should_create_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -20,7 +20,7 @@ def test_should_create_docker_base_folder():
 
 def test_should_create_docker_compose_yml_file_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -33,7 +33,7 @@ def test_should_create_docker_compose_yml_file_in_docker_base_folder():
 
 def test_should_setup_correct_dags_folder_in_docker_compose_yml_file():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -45,7 +45,7 @@ def test_should_setup_correct_dags_folder_in_docker_compose_yml_file():
             actual = f.read()
 
         expected_docker_compose_yml_file_path = (
-            Path(__file__).resolve().parent
+            Path(__file__).resolve().parent.parent
             / "resources"
             / "expected_docker_compose.yml"
         )
@@ -57,7 +57,7 @@ def test_should_setup_correct_dags_folder_in_docker_compose_yml_file():
 
 def test_should_create_docker_compose_tests_yml_file_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -72,7 +72,7 @@ def test_should_create_docker_compose_tests_yml_file_in_docker_base_folder():
 
 def test_should_setup_correct_dags_folder_in_docker_compose_tests_yml_file():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -86,7 +86,7 @@ def test_should_setup_correct_dags_folder_in_docker_compose_tests_yml_file():
             actual = f.read()
 
         expected_docker_compose_tests_yml_file_path = (
-            Path(__file__).resolve().parent
+            Path(__file__).resolve().parent.parent
             / "resources"
             / "expected_docker-compose-tests.yml"
         )
@@ -98,7 +98,7 @@ def test_should_setup_correct_dags_folder_in_docker_compose_tests_yml_file():
 
 def test_should_create_docker_compose_dev_yml_file_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -113,7 +113,7 @@ def test_should_create_docker_compose_dev_yml_file_in_docker_base_folder():
 
 def test_should_setup_correct_dags_folder_in_docker_compose_dev_yml_file():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -127,7 +127,7 @@ def test_should_setup_correct_dags_folder_in_docker_compose_dev_yml_file():
             actual = f.read()
 
         expected_docker_compose_dev_yml_file_path = (
-            Path(__file__).resolve().parent
+            Path(__file__).resolve().parent.parent
             / "resources"
             / "expected_docker-compose-dev.yml"
         )
@@ -139,7 +139,7 @@ def test_should_setup_correct_dags_folder_in_docker_compose_dev_yml_file():
 
 def test_should_create_airflow_connections_and_variable_seeder_folder_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -154,7 +154,7 @@ def test_should_create_airflow_connections_and_variable_seeder_folder_in_docker_
 
 def test_should_create_connections_seeder_yml_file_in_airflow_connections_and_variables_seeder_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -172,7 +172,7 @@ def test_should_create_connections_seeder_yml_file_in_airflow_connections_and_va
 
 def test_should_write_some_example_connections_in_connections_seeder_yml_file():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -198,7 +198,7 @@ def test_should_write_some_example_connections_in_connections_seeder_yml_file():
 
 def test_should_create_variables_json_file_in_airflow_connections_and_variables_seeder_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -216,7 +216,7 @@ def test_should_create_variables_json_file_in_airflow_connections_and_variables_
 
 def test_should_write_some_example_variables_in_variables_json_file():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -241,7 +241,7 @@ def test_should_write_some_example_variables_in_variables_json_file():
 
 def test_should_create_docker_compose_manual_testing_yml_file_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -256,7 +256,7 @@ def test_should_create_docker_compose_manual_testing_yml_file_in_docker_base_fol
 
 def test_should_create_envrc_file_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -269,7 +269,7 @@ def test_should_create_envrc_file_in_docker_base_folder():
 
 def test_should_setup_correct_template_in_envrc_file():
     with tempfile.TemporaryDirectory() as temp_dir:
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
@@ -281,7 +281,7 @@ def test_should_setup_correct_template_in_envrc_file():
             actual = f.read()
 
         expected_envrc_file_path = (
-            Path(__file__).resolve().parent
+            Path(__file__).resolve().parent.parent
             / "resources"
             / "expected_envrc"
         )
@@ -295,9 +295,9 @@ def test_should_set_current_working_directory_as_default_working_directory_when_
     mocker,
 ):
     with tempfile.TemporaryDirectory() as temp_dir:
-        mocker.patch("airflow_e2e.generator.os.getcwd", return_value=temp_dir)
+        mocker.patch("airflow_e2e.generator.generator.os.getcwd", return_value=temp_dir)
 
-        generate(
+        generator.generate(
             dags="some/dags/folder",
             tests="some/tests/folder",
         )
