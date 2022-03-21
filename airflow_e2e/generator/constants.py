@@ -2,7 +2,7 @@ from pathlib import Path
 
 DOCKER_FOLDER_NAME = "docker"
 
-REPO_ROOT_DIR_PATH = Path(__file__).resolve().parent.parent.parent
+REPO_ROOT_DIR_PATH = Path(__file__).resolve().parent.parent
 
 TEMPLATES_FOLDER_NAME = "templates"
 TEMPLATES_DIR_PATH = REPO_ROOT_DIR_PATH / TEMPLATES_FOLDER_NAME
