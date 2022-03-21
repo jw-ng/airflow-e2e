@@ -1,3 +1,4 @@
+import os
 import typing
 from pathlib import Path
 from string import Template
@@ -47,11 +48,13 @@ VARIABLES_JSON_TEMPLATE_FILE_NAME = "variables.json.template"
 VARIABLES_JSON_FILE_NAME = "variables.json"
 
 
-def generate(dags: str, tests: str, working_dir: str):
+def generate(dags: str, tests: str, working_dir: str = None):
     substitutions = {
         DAGS_FOLDER_TEMPLATE_STRING: dags,
         TESTS_FOLDER_TEMPLATE_STRING: tests,
     }
+
+    working_dir = os.getcwd() if working_dir is None else working_dir
 
     docker_folder_path = Path(working_dir) / DOCKER_FOLDER_NAME
     docker_folder_path.mkdir(parents=True, exist_ok=True)
@@ -91,7 +94,9 @@ def _setup_airflow_connections_and_variables_seeder_folder(docker_folder_path: P
     airflow_connections_and_variables_seeder_folder_path = (
         docker_folder_path / AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME
     )
-    airflow_connections_and_variables_seeder_folder_path.mkdir(parents=True, exist_ok=True)
+    airflow_connections_and_variables_seeder_folder_path.mkdir(
+        parents=True, exist_ok=True
+    )
 
     seeder_template_map = {
         CONNECTIONS_YML_TEMPLATE_FILE_NAME: CONNECTIONS_YML_FILE_NAME,
