@@ -1,0 +1,2 @@
+include airflow_e2e/templates/*.template
+include airflow_e2e/templates/airflow-connections-and-variables-seeder/*.template
