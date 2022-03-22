@@ -14,5 +14,11 @@ def parse(args: typing.List[str]) -> argparse.Namespace:
         required=True,
         help="E2E test suite folder path, relative from the root of the repository",
     )
+    parser.add_argument(
+        "--requirements",
+        required=False,
+        action="store_true",
+        help="Indicate if a requirements.txt file is to be used",
+    )
 
     return parser.parse_args(args)
