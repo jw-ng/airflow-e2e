@@ -281,9 +281,7 @@ def test_should_setup_correct_template_in_envrc_file():
             actual = f.read()
 
         expected_envrc_file_path = (
-            Path(__file__).resolve().parent.parent
-            / "resources"
-            / "expected_envrc"
+            Path(__file__).resolve().parent.parent / "resources" / "expected_envrc"
         )
         with expected_envrc_file_path.open() as f:
             expected = f.read()
@@ -306,3 +304,27 @@ def test_should_set_current_working_directory_as_default_working_directory_when_
 
         assert docker_folder_path.exists()
         assert docker_folder_path.is_dir()
+
+
+def test_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_not_needed():
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generator.generate_without_requirements(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        docker_compose_yml_file_path = Path(temp_dir) / "docker" / "docker-compose.yml"
+
+        with docker_compose_yml_file_path.open() as f:
+            actual = f.read()
+
+        expected_docker_compose_yml_file_path = (
+            Path(__file__).resolve().parent.parent
+            / "resources"
+            / "expected_docker-compose_without_requirements.yml"
+        )
+        with expected_docker_compose_yml_file_path.open() as f:
+            expected = f.read()
+
+        assert actual == expected
