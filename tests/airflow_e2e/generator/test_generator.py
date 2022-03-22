@@ -1,6 +1,7 @@
 import json
 import tempfile
 from pathlib import Path
+from unittest.mock import MagicMock, call
 
 from airflow_e2e.generator import generator
 
@@ -16,43 +17,6 @@ def test_should_create_docker_base_folder():
         expected_docker_folder_path = Path(temp_dir) / "docker"
 
         assert expected_docker_folder_path.exists()
-
-
-def test_should_create_docker_compose_yml_file_in_docker_base_folder():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        docker_compose_yml_file_path = Path(temp_dir) / "docker" / "docker-compose.yml"
-
-        assert docker_compose_yml_file_path.exists()
-
-
-def test_should_setup_correct_dags_folder_in_docker_compose_yml_file():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        docker_compose_yml_file_path = Path(temp_dir) / "docker" / "docker-compose.yml"
-
-        with docker_compose_yml_file_path.open() as f:
-            actual = f.read()
-
-        expected_docker_compose_yml_file_path = (
-            Path(__file__).resolve().parent.parent
-            / "resources"
-            / "expected_docker_compose.yml"
-        )
-        with expected_docker_compose_yml_file_path.open() as f:
-            expected = f.read()
-
-        assert actual == expected
 
 
 def test_should_create_docker_compose_tests_yml_file_in_docker_base_folder():
@@ -306,7 +270,38 @@ def test_should_set_current_working_directory_as_default_working_directory_when_
         assert docker_folder_path.is_dir()
 
 
-def test_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_not_needed():
+def test_generate_should_setup_airflow_core_services(mocker):
+    mock_composer_instance = MagicMock()
+    spy_composer = mocker.patch(
+        "airflow_e2e.generator.generator.AirflowCoreServicesComposer",
+        return_value=mock_composer_instance,
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generator.generate(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        assert spy_composer.call_count == 1
+        assert spy_composer.call_args == call(dags="some/dags/folder")
+
+        assert mock_composer_instance.setup.call_count == 1
+        assert mock_composer_instance.setup.call_args == call(
+            working_dir=Path(temp_dir) / "docker"
+        )
+
+
+def test_generate_without_requirements_should_setup_airflow_core_services_without_mounting_requirements_txt(
+    mocker,
+):
+    mock_composer_instance = MagicMock()
+    spy_composer = mocker.patch(
+        "airflow_e2e.generator.generator.AirflowCoreServicesComposer",
+        return_value=mock_composer_instance,
+    )
+
     with tempfile.TemporaryDirectory() as temp_dir:
         generator.generate_without_requirements(
             dags="some/dags/folder",
@@ -314,17 +309,10 @@ def test_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_not_
             working_dir=temp_dir,
         )
 
-        docker_compose_yml_file_path = Path(temp_dir) / "docker" / "docker-compose.yml"
+        assert spy_composer.call_count == 1
+        assert spy_composer.call_args == call(dags="some/dags/folder")
 
-        with docker_compose_yml_file_path.open() as f:
-            actual = f.read()
-
-        expected_docker_compose_yml_file_path = (
-            Path(__file__).resolve().parent.parent
-            / "resources"
-            / "expected_docker-compose_without_requirements.yml"
+        assert mock_composer_instance.setup_without_mount.call_count == 1
+        assert mock_composer_instance.setup_without_mount.call_args == call(
+            working_dir=Path(temp_dir) / "docker"
         )
-        with expected_docker_compose_yml_file_path.open() as f:
-            expected = f.read()
-
-        assert actual == expected

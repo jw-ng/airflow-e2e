@@ -3,6 +3,7 @@ import typing
 from pathlib import Path
 from string import Template
 
+from airflow_e2e.generator.airflow_core_services_composer import AirflowCoreServicesComposer
 from airflow_e2e.generator.constants import (
     AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME,
     DAGS_FOLDER_TEMPLATE_STRING,
@@ -12,7 +13,6 @@ from airflow_e2e.generator.constants import (
     SEEDER_TEMPLATE_MAP,
     TEMPLATES_DIR_PATH,
     TEMPLATE_MAP,
-    TEMPLATE_MAP_WITHOUT_REQUIREMENTS,
     TESTS_FOLDER_TEMPLATE_STRING,
 )
 
@@ -21,7 +21,7 @@ def generate(dags: str, tests: str, working_dir: str = None):
     _generate(
         dags=dags,
         tests=tests,
-        template_map=TEMPLATE_MAP,
+        mount_requirements=True,
         working_dir=working_dir,
     )
 
@@ -30,7 +30,7 @@ def generate_without_requirements(dags: str, tests: str, working_dir: str = None
     _generate(
         dags=dags,
         tests=tests,
-        template_map=TEMPLATE_MAP_WITHOUT_REQUIREMENTS,
+        mount_requirements=False,
         working_dir=working_dir,
     )
 
@@ -38,7 +38,7 @@ def generate_without_requirements(dags: str, tests: str, working_dir: str = None
 def _generate(
     dags: str,
     tests: str,
-    template_map: typing.Dict[str, str],
+    mount_requirements: bool,
     working_dir: str = None,
 ):
     substitutions = {
@@ -51,7 +51,7 @@ def _generate(
     docker_folder_path = Path(working_dir) / DOCKER_FOLDER_NAME
     docker_folder_path.mkdir(parents=True, exist_ok=True)
 
-    for template_file_name, output_file_name in template_map.items():
+    for template_file_name, output_file_name in TEMPLATE_MAP.items():
         _setup_docker_compose_file(
             template_file_name=template_file_name,
             output_file_name=output_file_name,
@@ -64,6 +64,12 @@ def _generate(
     )
 
     _setup_envrc_file(docker_folder_path)
+
+    airflow_core_services_composer = AirflowCoreServicesComposer(dags=dags)
+    if mount_requirements:
+        airflow_core_services_composer.setup(working_dir=docker_folder_path)
+    else:
+        airflow_core_services_composer.setup_without_mount(working_dir=docker_folder_path)
 
 
 def _setup_docker_compose_file(
