@@ -11,7 +11,10 @@ def main():
     args = parser.parse(sys.argv[1:])
 
     working_dir = os.getcwd()
-    generator.generate(dags=args.dags, tests=args.tests, working_dir=working_dir)
+    if args.requirements:
+        generator.generate(dags=args.dags, tests=args.tests, working_dir=working_dir)
+    else:
+        generator.generate_without_requirements(dags=args.dags, tests=args.tests, working_dir=working_dir)
 
     print_to_screen(f"Airflow E2E test scripts generated in '{working_dir}/docker/'\n")
     print_to_screen(CONVENIENT_MAKE_COMMANDS)

@@ -12,25 +12,34 @@ pip install airflow-e2e
 
 ### Pre-requisites
 
-Before generating and running the E2E test scripts, the following files are required to
-be present in your repository:
+Before generating and running the E2E test scripts, the following folders and files are
+required to be present in your repository:
 
-1. A `requirements.txt` file at the root of your repository, which contains all
-   Python packages required by your Airflow scheduler and workers to perform the
-   tasks under tests
-2. A `requirements-dev.txt` file at the root of your repository, which contains
+1. A folder that contains the Airflow DAGs under test
+2. A folder that contains the E2E test suite(s)
+3. A `requirements-dev.txt` file at the root of your repository, which contains
    all the Python pacakges required by the test runner to run you E2E test 
    suite(s)
-3. A folder that contains the Airflow DAGs under test
-4. A folder that contains the E2E test suite(s)
+
+Optionally, we can have a `requirements.txt` file at the root of your repository, which
+contains all Python packages required by your Airflow scheduler and workers to perform
+the tasks under tests.
 
 ### Generating the test scripts
 
 To generate the Airflow E2E test scripts, run the following command at the root
 of your repository:
 
+Generating Airflow E2E test scripts without `requirements.txt`:
+
 ```shell
 airflow-e2e --dags dags/ --tests tests/e2e
+```
+
+Alternatively, if you have packages to be installed in the Airflow services:
+
+```shell
+airflow-e2e --dags dags/ --tests tests/e2e --requirements
 ```
 
 This will generate a `docker` folder at the root of your repository, and it will
