@@ -15,6 +15,7 @@ from airflow_e2e.generator.constants import (
     TEMPLATE_MAP,
     TESTS_FOLDER_TEMPLATE_STRING,
 )
+from airflow_e2e.generator.e2e_test_runner_service_composer import E2eTestRunnerServiceComposer
 
 
 def generate(dags: str, tests: str, working_dir: str = None):
@@ -70,6 +71,9 @@ def _generate(
         airflow_core_services_composer.setup(working_dir=docker_folder_path)
     else:
         airflow_core_services_composer.setup_without_mount(working_dir=docker_folder_path)
+
+    e2e_test_runner_service_composer = E2eTestRunnerServiceComposer(dags=dags, tests=tests)
+    e2e_test_runner_service_composer.setup(working_dir=docker_folder_path)
 
 
 def _setup_docker_compose_file(
