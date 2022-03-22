@@ -1,4 +1,3 @@
-import json
 import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, call
@@ -17,149 +16,6 @@ def test_should_create_docker_base_folder():
         expected_docker_folder_path = Path(temp_dir) / "docker"
 
         assert expected_docker_folder_path.exists()
-
-
-def test_should_create_docker_compose_dev_yml_file_in_docker_base_folder():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        docker_compose_dev_yml_file_path = (
-            Path(temp_dir) / "docker" / "docker-compose-dev.yml"
-        )
-
-        assert docker_compose_dev_yml_file_path.exists()
-
-
-def test_should_setup_correct_dags_folder_in_docker_compose_dev_yml_file():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        docker_compose_dev_yml_file_path = (
-            Path(temp_dir) / "docker" / "docker-compose-dev.yml"
-        )
-
-        with docker_compose_dev_yml_file_path.open() as f:
-            actual = f.read()
-
-        expected_docker_compose_dev_yml_file_path = (
-            Path(__file__).resolve().parent.parent
-            / "resources"
-            / "expected_docker-compose-dev.yml"
-        )
-        with expected_docker_compose_dev_yml_file_path.open() as f:
-            expected = f.read()
-
-        assert actual == expected
-
-
-def test_should_create_airflow_connections_and_variable_seeder_folder_in_docker_base_folder():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        expected_seeder_folder_path = (
-            Path(temp_dir) / "docker" / "airflow-connections-and-variables-seeder"
-        )
-
-        assert expected_seeder_folder_path.exists()
-
-
-def test_should_create_connections_seeder_yml_file_in_airflow_connections_and_variables_seeder_folder():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        connections_seeder_yml_file = (
-            Path(temp_dir)
-            / "docker"
-            / "airflow-connections-and-variables-seeder"
-            / "connections.yml"
-        )
-
-        assert connections_seeder_yml_file.exists()
-
-
-def test_should_write_some_example_connections_in_connections_seeder_yml_file():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        connections_seeder_yml_file = (
-            Path(temp_dir)
-            / "docker"
-            / "airflow-connections-and-variables-seeder"
-            / "connections.yml"
-        )
-
-        with connections_seeder_yml_file.open() as f:
-            actual = f.readlines()
-
-        assert actual == [
-            "example_conn_id:\n",
-            "  conn_type: mongo\n",
-            "  host: 192.168.1.123\n",
-            "  port: 27017\n",
-        ]
-
-
-def test_should_create_variables_json_file_in_airflow_connections_and_variables_seeder_folder():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        variables_json_file = (
-            Path(temp_dir)
-            / "docker"
-            / "airflow-connections-and-variables-seeder"
-            / "variables.json"
-        )
-
-        assert variables_json_file.exists()
-
-
-def test_should_write_some_example_variables_in_variables_json_file():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        variables_json_file = (
-            Path(temp_dir)
-            / "docker"
-            / "airflow-connections-and-variables-seeder"
-            / "variables.json"
-        )
-
-        with variables_json_file.open() as f:
-            actual = json.load(f)
-
-        assert actual == {
-            "example_string_variable": "example_string_value",
-            "example_json_variable": {"foo": "bar", "baz": 42},
-            "example_array_variable": ["lorem", "ipsum"],
-        }
 
 
 def test_should_create_docker_compose_manual_testing_yml_file_in_docker_base_folder():
@@ -322,6 +178,54 @@ def test_generate_without_requirements_should_setup_e2e_test_runner_service(mock
             dags="some/dags/folder",
             tests="some/tests/folder",
         )
+
+        assert mock_composer_instance.setup.call_count == 1
+        assert mock_composer_instance.setup.call_args == call(
+            working_dir=Path(temp_dir) / "docker"
+        )
+
+
+def test_generate_should_setup_airflow_seeder_service_composer(mocker):
+    mock_composer_instance = MagicMock()
+    spy_composer = mocker.patch(
+        "airflow_e2e.generator.generator.AirflowSeederServiceComposer",
+        return_value=mock_composer_instance,
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generator.generate(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        assert spy_composer.call_count == 1
+        assert spy_composer.call_args == call()
+
+        assert mock_composer_instance.setup.call_count == 1
+        assert mock_composer_instance.setup.call_args == call(
+            working_dir=Path(temp_dir) / "docker"
+        )
+
+
+def test_generate_without_requirements_should_setup_airflow_seeder_service_composer(
+    mocker,
+):
+    mock_composer_instance = MagicMock()
+    spy_composer = mocker.patch(
+        "airflow_e2e.generator.generator.AirflowSeederServiceComposer",
+        return_value=mock_composer_instance,
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generator.generate_without_requirements(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        assert spy_composer.call_count == 1
+        assert spy_composer.call_args == call()
 
         assert mock_composer_instance.setup.call_count == 1
         assert mock_composer_instance.setup.call_args == call(

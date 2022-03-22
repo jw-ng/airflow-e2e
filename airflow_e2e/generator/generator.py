@@ -3,19 +3,24 @@ import typing
 from pathlib import Path
 from string import Template
 
-from airflow_e2e.generator.airflow_core_services_composer import AirflowCoreServicesComposer
+from airflow_e2e.generator.airflow_core_services_composer import (
+    AirflowCoreServicesComposer,
+)
+from airflow_e2e.generator.airflow_seeder_service_composer import (
+    AirflowSeederServiceComposer,
+)
 from airflow_e2e.generator.constants import (
-    AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME,
     DAGS_FOLDER_TEMPLATE_STRING,
     DOCKER_FOLDER_NAME,
     ENVRC_FILE_NAME,
     ENVRC_TEMPLATE_FILE_NAME,
-    SEEDER_TEMPLATE_MAP,
     TEMPLATES_DIR_PATH,
     TEMPLATE_MAP,
     TESTS_FOLDER_TEMPLATE_STRING,
 )
-from airflow_e2e.generator.e2e_test_runner_service_composer import E2eTestRunnerServiceComposer
+from airflow_e2e.generator.e2e_test_runner_service_composer import (
+    E2eTestRunnerServiceComposer,
+)
 
 
 def generate(dags: str, tests: str, working_dir: str = None):
@@ -60,20 +65,23 @@ def _generate(
             substitutions=substitutions,
         )
 
-    _setup_airflow_connections_and_variables_seeder_folder(
-        docker_folder_path=docker_folder_path
-    )
-
     _setup_envrc_file(docker_folder_path)
 
     airflow_core_services_composer = AirflowCoreServicesComposer(dags=dags)
     if mount_requirements:
         airflow_core_services_composer.setup(working_dir=docker_folder_path)
     else:
-        airflow_core_services_composer.setup_without_mount(working_dir=docker_folder_path)
+        airflow_core_services_composer.setup_without_mount(
+            working_dir=docker_folder_path
+        )
 
-    e2e_test_runner_service_composer = E2eTestRunnerServiceComposer(dags=dags, tests=tests)
+    e2e_test_runner_service_composer = E2eTestRunnerServiceComposer(
+        dags=dags, tests=tests
+    )
     e2e_test_runner_service_composer.setup(working_dir=docker_folder_path)
+
+    airflow_seeder_service_composer = AirflowSeederServiceComposer()
+    airflow_seeder_service_composer.setup(working_dir=docker_folder_path)
 
 
 def _setup_docker_compose_file(
@@ -90,40 +98,6 @@ def _setup_docker_compose_file(
     with docker_compose_yml_file_path.open("w") as docker_compose_yml_file:
         content = docker_compose_yml_template.substitute(**substitutions)
         docker_compose_yml_file.write(content)
-
-
-def _setup_airflow_connections_and_variables_seeder_folder(docker_folder_path: Path):
-    airflow_connections_and_variables_seeder_folder_path = (
-        docker_folder_path / AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME
-    )
-    airflow_connections_and_variables_seeder_folder_path.mkdir(
-        parents=True, exist_ok=True
-    )
-
-    for template_file_name, output_file_name in SEEDER_TEMPLATE_MAP.items():
-        _create_seeder_template_file(
-            template_file_name=template_file_name,
-            output_file_name=output_file_name,
-            seeder_base_folder_path=airflow_connections_and_variables_seeder_folder_path,
-        )
-
-
-def _create_seeder_template_file(
-    template_file_name: str,
-    output_file_name: str,
-    seeder_base_folder_path: Path,
-):
-    seeder_template_file_path = (
-        TEMPLATES_DIR_PATH
-        / AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME
-        / template_file_name
-    )
-    with seeder_template_file_path.open(mode="r") as template_file:
-        template = template_file.read()
-
-    output_file_path = seeder_base_folder_path / output_file_name
-    with output_file_path.open(mode="w") as f:
-        f.write(template)
 
 
 def _setup_envrc_file(docker_folder_path: Path):
