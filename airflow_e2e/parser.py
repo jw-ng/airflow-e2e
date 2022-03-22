@@ -18,7 +18,13 @@ def parse(args: typing.List[str]) -> argparse.Namespace:
         "--requirements",
         required=False,
         action="store_true",
-        help="Indicate if a requirements.txt file is to be used",
+        help="Indicate if a requirements.txt file is to be mounted for the Airflow services",
+    )
+    parser.add_argument(
+        "--test-requirements",
+        required=False,
+        action="store_true",
+        help="Indicate if a requirements-dev.txt file is to be mounted for the test runner service",
     )
 
     return parser.parse_args(args)
