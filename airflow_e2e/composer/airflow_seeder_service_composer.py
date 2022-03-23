@@ -1,10 +1,15 @@
 from pathlib import Path
 
+import yaml
+
 from airflow_e2e.composer import copy_from_template
 from airflow_e2e.composer.constants import (
     TEMPLATES_DIR_PATH,
 )
-from airflow_e2e.composer.docker_compose_file.docker_compose_dev_yaml_file import DockerComposeDevYamlFile
+from airflow_e2e.composer.docker_compose_file.docker_compose_dev_yaml_file import (
+    DockerComposeDevYamlFile,
+)
+from airflow_e2e.composer.seeder_file.connections_yaml_file import ConnectionsYamlFile
 
 DOCKER_COMPOSE_DEV_YML_FILE_NAME = "docker-compose-dev.yml"
 
@@ -19,7 +24,6 @@ VARIABLES_JSON_TEMPLATE_FILE_NAME = "variables.json.template"
 VARIABLES_JSON_FILE_NAME = "variables.json"
 
 SEEDER_TEMPLATE_MAP = {
-    CONNECTIONS_YML_TEMPLATE_FILE_NAME: CONNECTIONS_YML_FILE_NAME,
     VARIABLES_JSON_TEMPLATE_FILE_NAME: VARIABLES_JSON_FILE_NAME,
 }
 
@@ -42,6 +46,14 @@ class AirflowSeederServiceComposer:
         airflow_connections_and_variables_seeder_folder_path.mkdir(
             parents=True, exist_ok=True
         )
+
+        connections_example_yaml_file = ConnectionsYamlFile()
+        connections_yaml_file_path = (
+            airflow_connections_and_variables_seeder_folder_path
+            / CONNECTIONS_YML_FILE_NAME
+        )
+        with connections_yaml_file_path.open(mode="w") as f:
+            f.write(yaml.safe_dump(connections_example_yaml_file.data))
 
         for template_file_name, output_file_name in SEEDER_TEMPLATE_MAP.items():
             template_file_path = (
