@@ -1,6 +1,7 @@
 import json
 import tempfile
 from pathlib import Path
+from unittest.mock import MagicMock, call, mock_open
 
 from airflow_e2e.composer.airflow_seeder_service_composer import AirflowSeederServiceComposer
 
@@ -15,26 +16,25 @@ class TestAirflowSeederServiceComposer:
             docker_compose_dev_yml_file_path = Path(temp_dir) / "docker-compose-dev.yml"
             assert docker_compose_dev_yml_file_path.exists()
 
-    def test_should_setup_correct_dags_folder_in_docker_compose_dev_yml_file(self):
+    def test_should_setup_correct_docker_compose_dev_yml_file(self, mocker):
+        mock_yaml_file_instance = MagicMock()
+        spy_yaml_file = mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.DockerComposeDevYamlFile",
+            return_value=mock_yaml_file_instance,
+        )
+        mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.Path.open",
+            mock_open(),
+        )
+
         with tempfile.TemporaryDirectory() as temp_dir:
             composer = AirflowSeederServiceComposer()
 
             composer.setup(working_dir=Path(temp_dir))
 
-            docker_compose_dev_yml_file_path = Path(temp_dir) / "docker-compose-dev.yml"
-
-            with docker_compose_dev_yml_file_path.open() as f:
-                actual = f.read()
-
-            expected_docker_compose_dev_yml_file_path = (
-                Path(__file__).resolve().parent.parent
-                / "resources"
-                / "expected_docker-compose-dev.yml"
+            assert spy_yaml_file.call_count == 1
+            assert spy_yaml_file.call_args == call(
             )
-            with expected_docker_compose_dev_yml_file_path.open() as f:
-                expected = f.read()
-
-            assert actual == expected
 
     def test_should_create_airflow_connections_and_variable_seeder_folder_in_docker_base_folder(
         self,

@@ -4,11 +4,9 @@ from airflow_e2e.composer import copy_from_template
 from airflow_e2e.composer.constants import (
     TEMPLATES_DIR_PATH,
 )
+from airflow_e2e.composer.docker_compose_file.docker_compose_dev_yaml_file import DockerComposeDevYamlFile
 
 DOCKER_COMPOSE_DEV_YML_FILE_NAME = "docker-compose-dev.yml"
-DOCKER_COMPOSE_DEV_YML_TEMPLATE_FILE_NAME = (
-    f"{DOCKER_COMPOSE_DEV_YML_FILE_NAME}.template"
-)
 
 AIRFLOW_CONNECTIONS_AND_VARIABLES_SEEDER_FOLDER_NAME = (
     "airflow-connections-and-variables-seeder"
@@ -28,15 +26,10 @@ SEEDER_TEMPLATE_MAP = {
 
 class AirflowSeederServiceComposer:
     def setup(self, working_dir: Path):
-        template_file_path = (
-            TEMPLATES_DIR_PATH / DOCKER_COMPOSE_DEV_YML_TEMPLATE_FILE_NAME
-        )
+        docker_compose_dev_yaml_file = DockerComposeDevYamlFile()
         output_file_path = working_dir / DOCKER_COMPOSE_DEV_YML_FILE_NAME
-
-        copy_from_template(
-            template_file_path=template_file_path,
-            output_file_path=output_file_path,
-        )
+        with output_file_path.open(mode="w") as f:
+            f.write(docker_compose_dev_yaml_file.content)
 
         self._setup_airflow_connections_and_variables_seeder_folder(
             working_dir=working_dir
