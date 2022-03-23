@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2022-03-23
+
+### Changed
+- `setup.py` now includes requirements for installing this project
+
 ## [0.2.0] - 2022-03-23
 
 ### Added

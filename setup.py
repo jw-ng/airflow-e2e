@@ -8,7 +8,7 @@ README = (REPO_ROOT_DIR_PATH / "README.md").read_text()
 
 setup(
     name="airflow-e2e",
-    version="0.2.0",
+    version="0.2.1",
     description="Create E2E test scripts for Airflow DAGs testing",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -22,7 +22,9 @@ setup(
     ],
     packages=find_packages(exclude=("tests",)),
     include_package_data=True,
-    install_requires=[],
+    install_requires=[
+        "PyYAML>=6.0"
+    ],
     entry_points={
         "console_scripts": [
             "airflow-e2e=airflow_e2e.__main__:main",
