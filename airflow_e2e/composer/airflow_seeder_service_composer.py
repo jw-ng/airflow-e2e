@@ -24,8 +24,8 @@ class AirflowSeederServiceComposer:
     def setup(self, working_dir: Path):
         docker_compose_dev_yaml_file = DockerComposeDevYamlFile()
         output_file_path = working_dir / DOCKER_COMPOSE_DEV_YML_FILE_NAME
-        with output_file_path.open(mode="w") as f:
-            f.write(docker_compose_dev_yaml_file.content)
+        with output_file_path.open(mode="w") as output_file:
+            output_file.write(docker_compose_dev_yaml_file.content)
 
         self._setup_airflow_connections_and_variables_seeder_folder(
             working_dir=working_dir
@@ -44,13 +44,13 @@ class AirflowSeederServiceComposer:
             airflow_connections_and_variables_seeder_folder_path
             / CONNECTIONS_YML_FILE_NAME
         )
-        with connections_yaml_file_path.open(mode="w") as f:
-            f.write(yaml.safe_dump(connections_example_yaml_file.data))
+        with connections_yaml_file_path.open(mode="w") as connections_yaml_file:
+            connections_yaml_file.write(yaml.safe_dump(connections_example_yaml_file.data))
 
         variables_example_json_file = VariablesJsonFile()
         variables_json_file_path = (
             airflow_connections_and_variables_seeder_folder_path
             / VARIABLES_JSON_FILE_NAME
         )
-        with variables_json_file_path.open(mode="w") as f:
-            f.write(json.dumps(variables_example_json_file.data))
+        with variables_json_file_path.open(mode="w") as variables_json_file:
+            variables_json_file.write(json.dumps(variables_example_json_file.data))

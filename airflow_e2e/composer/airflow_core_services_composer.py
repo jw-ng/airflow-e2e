@@ -15,5 +15,5 @@ class AirflowCoreServicesComposer:
 
     def setup(self, working_dir: Path):
         output_file_path = working_dir / DOCKER_COMPOSE_YML_FILE_NAME
-        with output_file_path.open(mode="w") as f:
-            f.write(self.yaml_file.content)
+        with output_file_path.open(mode="w") as output_file:
+            output_file.write(self.yaml_file.content)

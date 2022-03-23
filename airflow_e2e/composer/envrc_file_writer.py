@@ -10,5 +10,5 @@ class EnvrcFileWriter:
         file = EnvrcFile()
 
         output_file_path = working_dir / ENVRC_FILE_NAME
-        with output_file_path.open(mode="w") as f:
-            f.write(file.content)
+        with output_file_path.open(mode="w") as output_file:
+            output_file.write(file.content)

@@ -10,5 +10,5 @@ class ManualE2eTestRunnerServiceComposer:
     def setup(self, working_dir: Path):
         yaml_file = DockerComposeManualTestingYamlFile()
         output_file_path = working_dir / DOCKER_COMPOSE_MANUAL_TESTING_YML_FILE_NAME
-        with output_file_path.open(mode="w") as f:
-            f.write(yaml_file.content)
+        with output_file_path.open(mode="w") as output_file:
+            output_file.write(yaml_file.content)
