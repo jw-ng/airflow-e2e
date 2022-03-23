@@ -137,23 +137,57 @@ class TestAirflowSeederServiceComposer:
 
             assert variables_json_file.exists()
 
-    def test_should_write_some_example_variables_in_variables_json_file(self):
+    def test_should_setup_correct_example_variables_in_variables_json_file(
+        self, mocker
+    ):
+        mock_json_file_instance = MagicMock()
+        mock_json_file_instance.data = {}
+        spy_json_file = mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.VariablesJsonFile",
+            return_value=mock_json_file_instance,
+        )
+        mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.Path.open",
+            mock_open(),
+        )
+
         with tempfile.TemporaryDirectory() as temp_dir:
             composer = AirflowSeederServiceComposer()
 
             composer.setup(working_dir=Path(temp_dir))
 
-            variables_json_file = (
-                Path(temp_dir)
-                / "airflow-connections-and-variables-seeder"
-                / "variables.json"
+            assert spy_json_file.call_count == 1
+            assert spy_json_file.call_args == call()
+
+
+    def test_should_write_variables_json_file_with_correct_content(
+        self, mocker
+    ):
+        mock_json_file_instance = MagicMock()
+        mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.VariablesJsonFile",
+            return_value=mock_json_file_instance,
+        )
+
+        mock_variables_json_file_content = MagicMock()
+        mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.json.dumps",
+            return_value=mock_variables_json_file_content,
+        )
+
+        mock_output_file_open = mock_open()
+        mocker.patch(
+            "airflow_e2e.composer.airflow_seeder_service_composer.Path.open",
+            mock_output_file_open,
+        )
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            composer = AirflowSeederServiceComposer()
+
+            composer.setup(working_dir=Path(temp_dir))
+
+            output_file_handle = mock_output_file_open()
+            assert (
+                call(mock_variables_json_file_content)
+                in output_file_handle.write.call_args_list
             )
-
-            with variables_json_file.open() as f:
-                actual = json.load(f)
-
-            assert actual == {
-                "example_string_variable": "example_string_value",
-                "example_json_variable": {"foo": "bar", "baz": 42},
-                "example_array_variable": ["lorem", "ipsum"],
-            }
