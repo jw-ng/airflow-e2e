@@ -18,21 +18,6 @@ def test_should_create_docker_base_folder():
         assert expected_docker_folder_path.exists()
 
 
-def test_should_create_docker_compose_manual_testing_yml_file_in_docker_base_folder():
-    with tempfile.TemporaryDirectory() as temp_dir:
-        generator.generate(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-            working_dir=temp_dir,
-        )
-
-        docker_compose_manual_testing_yml_file_path = (
-            Path(temp_dir) / "docker" / "docker-compose-manual-testing.yml"
-        )
-
-        assert docker_compose_manual_testing_yml_file_path.exists()
-
-
 def test_should_create_envrc_file_in_docker_base_folder():
     with tempfile.TemporaryDirectory() as temp_dir:
         generator.generate(
@@ -214,6 +199,54 @@ def test_generate_without_requirements_should_setup_airflow_seeder_service_compo
     mock_composer_instance = MagicMock()
     spy_composer = mocker.patch(
         "airflow_e2e.generator.generator.AirflowSeederServiceComposer",
+        return_value=mock_composer_instance,
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generator.generate_without_requirements(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        assert spy_composer.call_count == 1
+        assert spy_composer.call_args == call()
+
+        assert mock_composer_instance.setup.call_count == 1
+        assert mock_composer_instance.setup.call_args == call(
+            working_dir=Path(temp_dir) / "docker"
+        )
+
+
+def test_generate_should_setup_manual_e2e_test_runner_service_composer(mocker):
+    mock_composer_instance = MagicMock()
+    spy_composer = mocker.patch(
+        "airflow_e2e.generator.generator.ManualE2eTestRunnerServiceComposer",
+        return_value=mock_composer_instance,
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        generator.generate(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+        )
+
+        assert spy_composer.call_count == 1
+        assert spy_composer.call_args == call()
+
+        assert mock_composer_instance.setup.call_count == 1
+        assert mock_composer_instance.setup.call_args == call(
+            working_dir=Path(temp_dir) / "docker"
+        )
+
+
+def test_generate_without_requirements_should_setup_manual_e2e_test_runner_service_composer(
+    mocker,
+):
+    mock_composer_instance = MagicMock()
+    spy_composer = mocker.patch(
+        "airflow_e2e.generator.generator.ManualE2eTestRunnerServiceComposer",
         return_value=mock_composer_instance,
     )
 

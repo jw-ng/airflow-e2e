@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  test-runner:
+    command: >
+      bash -c "bash /src/scripts/wait_for_airflow_web.sh
+      && tail -f /dev/null"
