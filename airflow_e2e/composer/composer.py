@@ -16,7 +16,7 @@ from airflow_e2e.composer.manual_e2e_test_runner_service_composer import (
 )
 
 
-def setup(dags: str, tests: str, working_dir: str = None):
+def setup(dags: str, tests: str, working_dir: str):
     _setup(
         dags=dags,
         tests=tests,
@@ -25,7 +25,7 @@ def setup(dags: str, tests: str, working_dir: str = None):
     )
 
 
-def setup_without_requirements(dags: str, tests: str, working_dir: str = None):
+def setup_without_requirements(dags: str, tests: str, working_dir: str):
     _setup(
         dags=dags,
         tests=tests,
@@ -38,10 +38,8 @@ def _setup(
     dags: str,
     tests: str,
     mount_requirements: bool,
-    working_dir: str = None,
+    working_dir: str,
 ):
-    working_dir = os.getcwd() if working_dir is None else working_dir
-
     docker_folder_path = Path(working_dir) / DOCKER_FOLDER_NAME
     docker_folder_path.mkdir(parents=True, exist_ok=True)
 

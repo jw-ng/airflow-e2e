@@ -18,23 +18,6 @@ def test_should_create_docker_base_folder():
         assert expected_docker_folder_path.exists()
 
 
-def test_should_set_current_working_directory_as_default_working_directory_when_not_specified(
-    mocker,
-):
-    with tempfile.TemporaryDirectory() as temp_dir:
-        mocker.patch("airflow_e2e.composer.composer.os.getcwd", return_value=temp_dir)
-
-        composer.setup(
-            dags="some/dags/folder",
-            tests="some/tests/folder",
-        )
-
-        docker_folder_path = Path(temp_dir) / "docker"
-
-        assert docker_folder_path.exists()
-        assert docker_folder_path.is_dir()
-
-
 def test_setup_should_setup_airflow_core_services(mocker):
     mock_composer_instance = MagicMock()
     spy_composer = mocker.patch(
