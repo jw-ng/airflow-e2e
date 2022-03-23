@@ -16,6 +16,7 @@ def main():
         tests=args.tests,
         working_dir=working_dir,
         with_custom_airflow_packages=args.with_custom_airflow_packages,
+        with_custom_test_packages=args.with_custom_test_packages,
     )
 
     print_to_screen(f"Airflow E2E test scripts generated in '{working_dir}/docker/'\n")

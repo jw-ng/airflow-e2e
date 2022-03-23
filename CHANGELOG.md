@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 - Support not mounting requirements.txt file for Airflow services
+- Support not mounting requirements-dev.txt file for the test runner service
 
 ## [0.1.1] - 2022-03-21
 

@@ -1,4 +1,5 @@
 from argparse import Namespace
+from itertools import product
 from unittest.mock import call
 
 import pytest as pytest
@@ -34,9 +35,12 @@ def test_should_parse_arguments_from_sys_argv(mocker):
     )
 
 
-@pytest.mark.parametrize("with_custom_airflow_packages_flag", [True, False])
+@pytest.mark.parametrize(
+    "with_custom_airflow_packages_flag, with_custom_test_packages_flag",
+    product((True, False), (True, False))
+)
 def test_should_setup_composer_with_correct_parameters(
-    mocker, with_custom_airflow_packages_flag
+    mocker, with_custom_airflow_packages_flag, with_custom_test_packages_flag
 ):
     mocker.patch(
         "airflow_e2e.__main__.parser.parse",
@@ -44,6 +48,7 @@ def test_should_setup_composer_with_correct_parameters(
             dags="some/dags/folder",
             tests="some/tests/folder",
             with_custom_airflow_packages=with_custom_airflow_packages_flag,
+            with_custom_test_packages=with_custom_test_packages_flag,
         ),
     )
     spy_setup = mocker.patch("airflow_e2e.__main__.composer.setup")
@@ -57,6 +62,7 @@ def test_should_setup_composer_with_correct_parameters(
         tests="some/tests/folder",
         working_dir="ROOT_OF_REPO",
         with_custom_airflow_packages=with_custom_airflow_packages_flag,
+        with_custom_test_packages=with_custom_test_packages_flag,
     )
 
 

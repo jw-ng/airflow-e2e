@@ -17,29 +17,37 @@ required to be present in your repository:
 
 1. A folder that contains the Airflow DAGs under test
 2. A folder that contains the E2E test suite(s)
-3. A `requirements-dev.txt` file at the root of your repository, which contains
-   all the Python pacakges required by the test runner to run you E2E test 
-   suite(s)
 
 Optionally, we can have a `requirements.txt` file at the root of your repository, which
 contains all Python packages required by your Airflow scheduler and workers to perform
 the tasks under tests.
+
+In addition, we can optionally have a `requirements-dev.txt` file at the root of your
+repository, which contains all the Python packages required by the test runner to run
+your E2E test suites.
 
 ### Generating the test scripts
 
 To generate the Airflow E2E test scripts, run the following command at the root
 of your repository:
 
-Generating Airflow E2E test scripts without `requirements.txt`:
+Generating Airflow E2E test scripts without `requirements.txt` and
+`requirements-dev.txt`:
 
 ```shell
 airflow-e2e --dags dags/ --tests tests/e2e
 ```
 
-Alternatively, if you have packages to be installed in the Airflow services:
+If you have packages to be installed in the Airflow services:
 
 ```shell
 airflow-e2e --dags dags/ --tests tests/e2e --with-custom-airflow-packages
+```
+
+If you have packages to be installed in the test runner service:
+
+```shell
+airflow-e2e --dags dags/ --tests tests/e2e --with-custom-test-packages
 ```
 
 This will generate a `docker` folder at the root of your repository, and it will

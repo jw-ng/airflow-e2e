@@ -47,3 +47,30 @@ class TestE2eTestRunnerServiceComposer:
                 expected = f.read()
 
             assert actual == expected
+
+    def test_setup_should_omit_requirements_dev_txt_mount_in_docker_compose_tests_yml_file_when_with_custom_test_packages(
+        self,
+    ):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            composer = E2eTestRunnerServiceComposer(
+                dags="some/dags/folder",
+                tests="some/tests/folder",
+            ).with_custom_test_packages()
+
+            composer.setup(working_dir=Path(temp_dir))
+
+            docker_compose_tests_yml_file_path = (
+                Path(temp_dir) / "docker-compose-tests.yml"
+            )
+            with docker_compose_tests_yml_file_path.open() as f:
+                actual = f.read()
+
+            expected_docker_compose_tests_yml_file_path = (
+                Path(__file__).resolve().parent.parent
+                / "resources"
+                / "expected_docker-compose-tests_without_requirements_dev.yml"
+            )
+            with expected_docker_compose_tests_yml_file_path.open() as f:
+                expected = f.read()
+
+            assert actual == expected
