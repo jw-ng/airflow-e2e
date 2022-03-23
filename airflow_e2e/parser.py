@@ -26,5 +26,11 @@ def parse(args: typing.List[str]) -> argparse.Namespace:
         action="store_true",
         help="Indicate if a requirements-dev.txt file is to be mounted for the test runner service",
     )
+    parser.add_argument(
+        "--with-mongo",
+        required=False,
+        action="store_true",
+        help="Indicate if a MongoDB service is to be spun up in the Docker Compose cluster",
+    )
 
     return parser.parse_args(args)
