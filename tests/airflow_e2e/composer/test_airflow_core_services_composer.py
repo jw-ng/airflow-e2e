@@ -1,7 +1,7 @@
 import tempfile
 from pathlib import Path
 
-from airflow_e2e.generator.airflow_core_services_composer import (
+from airflow_e2e.composer.airflow_core_services_composer import (
     AirflowCoreServicesComposer,
 )
 

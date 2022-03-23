@@ -3,7 +3,7 @@ import sys
 
 from airflow_e2e import parser
 from airflow_e2e.constants import BASIC_USAGE_INSTRUCTIONS, CONVENIENT_MAKE_COMMANDS
-from airflow_e2e.generator import generator
+from airflow_e2e.composer import composer
 from airflow_e2e.printer import print_to_screen
 
 
@@ -12,9 +12,9 @@ def main():
 
     working_dir = os.getcwd()
     if args.requirements:
-        generator.generate(dags=args.dags, tests=args.tests, working_dir=working_dir)
+        composer.setup(dags=args.dags, tests=args.tests, working_dir=working_dir)
     else:
-        generator.generate_without_requirements(dags=args.dags, tests=args.tests, working_dir=working_dir)
+        composer.setup_without_requirements(dags=args.dags, tests=args.tests, working_dir=working_dir)
 
     print_to_screen(f"Airflow E2E test scripts generated in '{working_dir}/docker/'\n")
     print_to_screen(CONVENIENT_MAKE_COMMANDS)

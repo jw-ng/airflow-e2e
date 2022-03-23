@@ -2,7 +2,7 @@ import json
 import tempfile
 from pathlib import Path
 
-from airflow_e2e.generator.airflow_seeder_service_composer import AirflowSeederServiceComposer
+from airflow_e2e.composer.airflow_seeder_service_composer import AirflowSeederServiceComposer
 
 
 class TestAirflowSeederServiceComposer:

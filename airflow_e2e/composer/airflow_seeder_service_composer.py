@@ -1,7 +1,7 @@
 from pathlib import Path
 
-from airflow_e2e.generator import copy_from_template
-from airflow_e2e.generator.constants import (
+from airflow_e2e.composer import copy_from_template
+from airflow_e2e.composer.constants import (
     TEMPLATES_DIR_PATH,
 )
 

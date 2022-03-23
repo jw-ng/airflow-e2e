@@ -1,7 +1,7 @@
 import tempfile
 from pathlib import Path
 
-from airflow_e2e.generator.envrc_file_writer import EnvrcFileWriter
+from airflow_e2e.composer.envrc_file_writer import EnvrcFileWriter
 
 
 class TestEnvrcFileWriter:

@@ -5,7 +5,7 @@ from airflow_e2e.__main__ import main
 
 def test_should_output_where_e2e_test_scripts_are_generated(mocker):
     mocker.patch("airflow_e2e.__main__.parser.parse")
-    mocker.patch("airflow_e2e.__main__.generator.generate")
+    mocker.patch("airflow_e2e.__main__.composer.setup")
     mocker.patch("airflow_e2e.__main__.os.getcwd", return_value="ROOT_OF_REPO")
 
     spy_print = mocker.patch("airflow_e2e.__main__.print_to_screen")
@@ -19,7 +19,7 @@ def test_should_output_where_e2e_test_scripts_are_generated(mocker):
 
 def test_should_output_convenient_make_commands(mocker):
     mocker.patch("airflow_e2e.__main__.parser.parse")
-    mocker.patch("airflow_e2e.__main__.generator.generate")
+    mocker.patch("airflow_e2e.__main__.composer.setup")
 
     spy_print = mocker.patch("airflow_e2e.__main__.print_to_screen")
 
@@ -64,7 +64,7 @@ def test_should_output_convenient_make_commands(mocker):
 
 def test_should_output_basic_usage_instructions_at_the_end(mocker):
     mocker.patch("airflow_e2e.__main__.parser.parse")
-    mocker.patch("airflow_e2e.__main__.generator.generate")
+    mocker.patch("airflow_e2e.__main__.composer.setup")
 
     spy_print = mocker.patch("airflow_e2e.__main__.print_to_screen")
 

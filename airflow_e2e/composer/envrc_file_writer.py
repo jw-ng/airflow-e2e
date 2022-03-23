@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from airflow_e2e.generator.constants import TEMPLATES_DIR_PATH
+from airflow_e2e.composer.constants import TEMPLATES_DIR_PATH
 
 
 ENVRC_TEMPLATE_FILE_NAME = ".envrc.template"
