@@ -55,7 +55,6 @@ services:
       - AIRFLOW_WEBSERVER_HOST=airflow-web
       - AIRFLOW__API__AUTH_BACKEND=airflow.api.auth.backend.basic_auth
       - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
-      - SOURCES=["foo","bar"]
 
   airflow-worker:
     container_name: airflow-worker
@@ -78,7 +77,6 @@ services:
       - AIRFLOW_WEBSERVER_HOST=airflow-web
       - AIRFLOW__API__AUTH_BACKEND=airflow.api.auth.backend.basic_auth
       - AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False
-      - SOURCES=["foo","bar"]
 
   postgresql:
     container_name: airflow-postgresql
