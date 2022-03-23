@@ -1,6 +1,61 @@
+from argparse import Namespace
 from unittest.mock import call
 
-from airflow_e2e.__main__ import main
+import pytest as pytest
+
+from airflow_e2e.__main__ import main, sys as _airflow_e2e_sys
+
+
+def test_should_parse_arguments_from_sys_argv(mocker):
+    spy_parse = mocker.patch("airflow_e2e.__main__.parser.parse")
+    mocker.patch("airflow_e2e.__main__.composer.setup")
+    mocker.patch.object(
+        _airflow_e2e_sys,
+        "argv",
+        [
+            "this_script.py",
+            "--dags",
+            "some/dags/folder",
+            "--tests",
+            "some/tests/folder",
+        ],
+    )
+
+    main()
+
+    assert spy_parse.call_count == 1
+    assert spy_parse.call_args == call(
+        [
+            "--dags",
+            "some/dags/folder",
+            "--tests",
+            "some/tests/folder",
+        ]
+    )
+
+
+@pytest.mark.parametrize("requirements_flag", [True, False])
+def test_should_setup_composer_with_correct_parameters(mocker, requirements_flag):
+    mocker.patch(
+        "airflow_e2e.__main__.parser.parse",
+        return_value=Namespace(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            requirements=requirements_flag,
+        ),
+    )
+    spy_setup = mocker.patch("airflow_e2e.__main__.composer.setup")
+    mocker.patch("airflow_e2e.__main__.os.getcwd", return_value="ROOT_OF_REPO")
+
+    main()
+
+    assert spy_setup.call_count == 1
+    assert spy_setup.call_args == call(
+        dags="some/dags/folder",
+        tests="some/tests/folder",
+        working_dir="ROOT_OF_REPO",
+        with_custom_airflow_installation=requirements_flag,
+    )
 
 
 def test_should_output_where_e2e_test_scripts_are_generated(mocker):
@@ -80,6 +135,3 @@ def test_should_output_basic_usage_instructions_at_the_end(mocker):
         "\n"
         "\tmake e2e\n"
     )
-
-
-
