@@ -22,7 +22,7 @@ def test_should_return_correct_namespace_containing_dags_and_tests_folder_when_s
         dags="dags/",
         tests="tests/",
         with_custom_airflow_packages=False,
-        test_requirements=False,
+        with_custom_test_packages=False,
     )
 
 
@@ -38,13 +38,13 @@ def test_should_be_true_when_with_custom_airflow_packages_flag_is_present():
     assert args.with_custom_airflow_packages is True
 
 
-def test_should_default_to_false_when_test_requirements_argument_is_not_specified():
+def test_should_default_to_false_when_with_custom_test_packages_argument_is_not_specified():
     args = parse(["--dags", "dags/", "--tests", "tests/"])
 
-    assert args.test_requirements is False
+    assert args.with_custom_test_packages is False
 
 
-def test_should_be_true_when_test_requirements_flag_is_present():
-    args = parse(["--dags", "dags/", "--tests", "tests/", "--test-requirements"])
+def test_should_be_true_when_with_custom_test_packages_flag_is_present():
+    args = parse(["--dags", "dags/", "--tests", "tests/", "--with-custom-test-packages"])
 
-    assert args.test_requirements is True
+    assert args.with_custom_test_packages is True
