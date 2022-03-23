@@ -50,6 +50,13 @@ If you have packages to be installed in the test runner service:
 airflow-e2e --dags dags/ --tests tests/e2e --with-custom-test-packages
 ```
 
+If you would like to have a MongoDB service to be set up together:
+
+```shell
+airflow-e2e --dags dags/ --tests tests/e2e --with-mongo
+```
+
+
 This will generate a `docker` folder at the root of your repository, and it will
 contain the following files:
 
@@ -62,6 +69,7 @@ contain the following files:
      |- .envrc
      |- docker-compose.yml
      |- docker-compose-dev.yml
+     |- docker-compose-extras.yml
      |- docker-compose-manual-testing.yml
      |- docker-compose-tests.yml
 ```
@@ -76,6 +84,7 @@ clean:
 	-f ./docker/docker-compose.yml \
 	-f ./docker/docker-compose-dev.yml \
 	-f ./docker/docker-compose-tests.yml \
+	-f ./docker/docker-compose-extras.yml \
 	down --remove-orphans --volumes
 
 dev: clean
@@ -83,6 +92,7 @@ dev: clean
 	docker-compose \
 	-f ./docker/docker-compose.yml \
 	-f ./docker/docker-compose-dev.yml \
+	-f ./docker/docker-compose-extras.yml \
 	up -d
 
 wait_for_airflow_web_to_be_healthy:
@@ -99,6 +109,7 @@ e2e:
 	docker-compose \
 	-f ./docker/docker-compose.yml \
 	-f ./docker/docker-compose-tests.yml \
+	-f ./docker/docker-compose-extras.yml \
 	up --exit-code-from test-runner
 ```
 

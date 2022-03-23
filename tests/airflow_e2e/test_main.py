@@ -49,6 +49,7 @@ def test_should_setup_composer_with_correct_parameters(
             tests="some/tests/folder",
             with_custom_airflow_packages=with_custom_airflow_packages_flag,
             with_custom_test_packages=with_custom_test_packages_flag,
+            with_mongo=False,
         ),
     )
     spy_setup = mocker.patch("airflow_e2e.__main__.composer.setup")
@@ -63,6 +64,7 @@ def test_should_setup_composer_with_correct_parameters(
         working_dir="ROOT_OF_REPO",
         with_custom_airflow_packages=with_custom_airflow_packages_flag,
         with_custom_test_packages=with_custom_test_packages_flag,
+        with_mongo=False,
     )
 
 

@@ -15,6 +15,7 @@ def test_should_create_docker_base_folder():
             working_dir=temp_dir,
             with_custom_airflow_packages=False,
             with_custom_test_packages=False,
+            with_mongo=False,
         )
 
         expected_docker_folder_path = Path(temp_dir) / "docker"
@@ -39,6 +40,7 @@ def test_setup_should_setup_airflow_core_services(
             working_dir=temp_dir,
             with_custom_airflow_packages=with_custom_airflow_packages_flag,
             with_custom_test_packages=False,
+            with_mongo=False,
         )
 
         assert spy_build.call_count == 1
@@ -70,6 +72,7 @@ def test_setup_should_setup_e2e_test_runner_service(
             working_dir=temp_dir,
             with_custom_airflow_packages=False,
             with_custom_test_packages=with_custom_test_packages_flag,
+            with_mongo=False,
         )
 
         assert spy_build.call_count == 1
@@ -99,6 +102,7 @@ def test_setup_should_setup_airflow_seeder_service_composer(mocker):
             working_dir=temp_dir,
             with_custom_airflow_packages=False,
             with_custom_test_packages=False,
+            with_mongo=False,
         )
 
         assert spy_composer.call_count == 1
@@ -108,6 +112,28 @@ def test_setup_should_setup_airflow_seeder_service_composer(mocker):
         assert mock_composer_instance.setup.call_args == call(
             working_dir=Path(temp_dir) / "docker"
         )
+
+
+@pytest.mark.parametrize("with_mongo_flag", [True, False])
+def test_setup_should_setup_extra_services_composer_with_mongo_when_with_mongo_is_true(
+    mocker, with_mongo_flag
+):
+    spy_build = mocker.patch(
+        "airflow_e2e.composer.composer.build_extra_services_composer",
+    )
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        composer.setup(
+            dags="some/dags/folder",
+            tests="some/tests/folder",
+            working_dir=temp_dir,
+            with_custom_airflow_packages=False,
+            with_custom_test_packages=False,
+            with_mongo=with_mongo_flag,
+        )
+
+        assert spy_build.call_count == 1
+        assert spy_build.call_args == call(with_mongo=with_mongo_flag)
 
 
 def test_setup_should_setup_manual_e2e_test_runner_service_composer(mocker):
@@ -124,6 +150,7 @@ def test_setup_should_setup_manual_e2e_test_runner_service_composer(mocker):
             working_dir=temp_dir,
             with_custom_airflow_packages=False,
             with_custom_test_packages=False,
+            with_mongo=False,
         )
 
         assert spy_composer.call_count == 1
@@ -149,6 +176,7 @@ def test_setup_should_setup_envrc_file_writer(mocker):
             working_dir=temp_dir,
             with_custom_airflow_packages=False,
             with_custom_test_packages=False,
+            with_mongo=False,
         )
 
         assert spy_writer.call_count == 1

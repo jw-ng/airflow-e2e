@@ -8,6 +8,7 @@ CONVENIENT_MAKE_COMMANDS = (
     "\t-f ./docker/docker-compose.yml \\\n"
     "\t-f ./docker/docker-compose-dev.yml \\\n"
     "\t-f ./docker/docker-compose-tests.yml \\\n"
+    "\t-f ./docker/docker-compose-extras.yml \\\n"
     "\tdown --remove-orphans --volumes\n"
     "\n"
     "dev: clean\n"
@@ -15,6 +16,7 @@ CONVENIENT_MAKE_COMMANDS = (
     "\tdocker-compose \\\n"
     "\t-f ./docker/docker-compose.yml \\\n"
     "\t-f ./docker/docker-compose-dev.yml \\\n"
+    "\t-f ./docker/docker-compose-extras.yml \\\n"
     "\tup -d\n"
     "\n"
     "wait_for_airflow_web_to_be_healthy:\n"
@@ -31,6 +33,7 @@ CONVENIENT_MAKE_COMMANDS = (
     "\tdocker-compose \\\n"
     "\t-f ./docker/docker-compose.yml \\\n"
     "\t-f ./docker/docker-compose-tests.yml \\\n"
+    "\t-f ./docker/docker-compose-extras.yml \\\n"
     "\tup --exit-code-from test-runner\n"
 )
 
