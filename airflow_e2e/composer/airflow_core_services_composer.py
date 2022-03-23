@@ -20,7 +20,7 @@ class AirflowCoreServicesComposer:
             TEMPLATES_DIR_PATH / DOCKER_COMPOSE_YML_TEMPLATE_FILE_NAME
         )
 
-    def with_custom_airflow_installation(self) -> "AirflowCoreServicesComposer":
+    def with_custom_airflow_packages(self) -> "AirflowCoreServicesComposer":
         self.template_file_path = (
             TEMPLATES_DIR_PATH
             / DOCKER_COMPOSE_YML_WITHOUT_REQUIREMENTS_TEMPLATE_FILE_NAME

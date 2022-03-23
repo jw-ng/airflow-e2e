@@ -10,7 +10,7 @@ def build_airflow_core_services_composer(
     airflow_core_services_composer = AirflowCoreServicesComposer(dags=dags)
 
     return (
-        airflow_core_services_composer.with_custom_airflow_installation()
+        airflow_core_services_composer.with_custom_airflow_packages()
         if with_custom_airflow_packages
         else airflow_core_services_composer
     )

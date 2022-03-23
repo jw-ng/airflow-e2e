@@ -36,11 +36,11 @@ class TestAirflowCoreServicesComposer:
 
             assert actual == expected
 
-    def test_setup_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_with_custom_mount(
+    def test_setup_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_with_custom_airflow_packages(
         self,
     ):
         with tempfile.TemporaryDirectory() as temp_dir:
-            composer = AirflowCoreServicesComposer(dags="some/dags/folder").with_custom_airflow_installation()
+            composer = AirflowCoreServicesComposer(dags="some/dags/folder").with_custom_airflow_packages()
 
             composer.setup(working_dir=Path(temp_dir))
 
