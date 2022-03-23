@@ -5,7 +5,7 @@ import yaml
 from airflow_e2e.composer.docker_compose_file.docker_compose_version import (
     DOCKER_COMPOSE_VERSION,
 )
-from airflow_e2e.composer.docker_compose_file.services.mongodb_extra_service import MONGODB_EXTRA_SERVICE
+from airflow_e2e.composer.docker_compose_file.services.mongodb_extra_service import MongoDbExtraService
 
 
 class DockerComposeExtrasYamlFile:
@@ -29,6 +29,6 @@ class DockerComposeExtrasYamlFile:
 
         self._services = {
             **services,
-            **MONGODB_EXTRA_SERVICE,
+            **MongoDbExtraService().data,
         }
         return self

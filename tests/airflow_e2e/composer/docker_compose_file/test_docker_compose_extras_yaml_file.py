@@ -6,7 +6,7 @@ from airflow_e2e.composer.docker_compose_file.docker_compose_extras_yaml_file im
     DockerComposeExtrasYamlFile,
 )
 from airflow_e2e.composer.docker_compose_file.services.mongodb_extra_service import (
-    MONGODB_EXTRA_SERVICE,
+    MongoDbExtraService,
 )
 
 
@@ -19,7 +19,7 @@ class TestDockerComposeExtrasYamlFile:
     def test_data_should_return_only_mongod_service_when_with_mongo(self):
         yaml_file = DockerComposeExtrasYamlFile().with_mongo()
 
-        assert yaml_file.data.get("services") == MONGODB_EXTRA_SERVICE
+        assert yaml_file.data.get("services") == MongoDbExtraService().data
 
     @pytest.mark.parametrize(
         "yaml_file",
