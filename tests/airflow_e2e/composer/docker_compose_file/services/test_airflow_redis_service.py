@@ -6,9 +6,7 @@ from airflow_e2e.composer.docker_compose_file.services.airflow_redis_service imp
 class TestAirflowRedisService:
     def test_should_return_correct_airflow_redis_service_settings(self):
         assert AirflowRedisService().data == {
-            "redis": {
-                "container_name": "airflow-redis",
-                "image": "bitnami/redis:latest",
-                "environment": ["ALLOW_EMPTY_PASSWORD=yes"],
-            }
+            "container_name": "airflow-redis",
+            "image": "bitnami/redis:latest",
+            "environment": ["ALLOW_EMPTY_PASSWORD=yes"],
         }

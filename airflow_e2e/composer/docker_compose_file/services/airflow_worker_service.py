@@ -5,14 +5,12 @@ from airflow_e2e.composer.docker_compose_file.services.base_service import BaseS
 
 class AirflowWorkerService(BaseService):
     def __init__(self, dags_folder: str):
-        self._data = {
+        self._volumes = [f"../{dags_folder}:/opt/bitnami/airflow/dags"]
+        self._base_data = {
             "container_name": "airflow-worker",
             "image": "bitnami/airflow-worker:latest",
             "depends_on": [
                 "airflow-web",
-            ],
-            "volumes": [
-                f"../{dags_folder}:/opt/bitnami/airflow/dags",
             ],
             "environment": [
                 "PYTHONPATH=/opt/bitnami/airflow",
@@ -30,13 +28,11 @@ class AirflowWorkerService(BaseService):
             ],
         }
 
-    def with_custom_airflow_packages(self) -> "AirflowWorkerService":
-        volumes = self._data.get("volumes").copy()
-        volumes += ["../requirements.txt:/bitnami/python/requirements.txt"]
-        self._data["volumes"] = volumes
-
-        return self
-
     @property
     def data(self) -> typing.Dict:
-        return {"airflow-worker": self._data}
+        return {**self._base_data, **{"volumes": self._volumes}}
+
+    def with_custom_airflow_packages(self) -> "AirflowWorkerService":
+        self._volumes += ["../requirements.txt:/bitnami/python/requirements.txt"]
+
+        return self

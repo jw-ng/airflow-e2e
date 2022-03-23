@@ -1,11 +1,13 @@
-from airflow_e2e.composer.docker_compose_file.services.airflow_worker_service import AirflowWorkerService
+from airflow_e2e.composer.docker_compose_file.services.airflow_worker_service import (
+    AirflowWorkerService,
+)
 
 
-def test_should_return_correct_airflow_worker_service_settings():
-    service = AirflowWorkerService(dags_folder="some/dags/folder")
+class TestAirflowWorkerService:
+    def test_should_return_correct_airflow_worker_service_settings(self):
+        service = AirflowWorkerService(dags_folder="some/dags/folder")
 
-    assert service.data == {
-        "airflow-worker": {
+        assert service.data == {
             "container_name": "airflow-worker",
             "image": "bitnami/airflow-worker:latest",
             "depends_on": [
@@ -29,14 +31,15 @@ def test_should_return_correct_airflow_worker_service_settings():
                 "AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False",
             ],
         }
-    }
 
+    def test_should_return_airflow_worker_service_with_requirements_txt_mount_when_with_custom_airflow_packages(
+        self,
+    ):
+        service = AirflowWorkerService(
+            dags_folder="some/dags/folder"
+        ).with_custom_airflow_packages()
 
-def test_should_return_airflow_worker_service_with_requirements_txt_mount_when_with_custom_airflow_packages():
-    service = AirflowWorkerService(dags_folder="some/dags/folder").with_custom_airflow_packages()
-
-    assert service.data == {
-        "airflow-worker": {
+        assert service.data == {
             "container_name": "airflow-worker",
             "image": "bitnami/airflow-worker:latest",
             "depends_on": [
@@ -61,4 +64,3 @@ def test_should_return_airflow_worker_service_with_requirements_txt_mount_when_w
                 "AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False",
             ],
         }
-    }

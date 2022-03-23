@@ -1,11 +1,13 @@
-from airflow_e2e.composer.docker_compose_file.services.airflow_scheduler_service import AirflowSchedulerService
+from airflow_e2e.composer.docker_compose_file.services.airflow_scheduler_service import (
+    AirflowSchedulerService,
+)
 
 
-def test_should_return_correct_airflow_scheduler_service_settings():
-    service = AirflowSchedulerService(dags_folder="some/dags/folder")
+class TestAirflowSchedulerService:
+    def test_should_return_correct_airflow_scheduler_service_settings(self):
+        service = AirflowSchedulerService(dags_folder="some/dags/folder")
 
-    assert service.data == {
-        "airflow-scheduler": {
+        assert service.data == {
             "container_name": "airflow-scheduler",
             "image": "bitnami/airflow-scheduler:latest",
             "depends_on": [
@@ -29,14 +31,15 @@ def test_should_return_correct_airflow_scheduler_service_settings():
                 "AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False",
             ],
         }
-    }
 
+    def test_should_return_airflow_scheduler_service_with_requirements_txt_mount_when_with_custom_airflow_packages(
+        self,
+    ):
+        service = AirflowSchedulerService(
+            dags_folder="some/dags/folder"
+        ).with_custom_airflow_packages()
 
-def test_should_return_airflow_scheduler_service_with_requirements_txt_mount_when_with_custom_airflow_packages():
-    service = AirflowSchedulerService(dags_folder="some/dags/folder").with_custom_airflow_packages()
-
-    assert service.data == {
-        "airflow-scheduler": {
+        assert service.data == {
             "container_name": "airflow-scheduler",
             "image": "bitnami/airflow-scheduler:latest",
             "depends_on": [
@@ -61,4 +64,3 @@ def test_should_return_airflow_scheduler_service_with_requirements_txt_mount_whe
                 "AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS=False",
             ],
         }
-    }

@@ -27,8 +27,9 @@ class DockerComposeExtrasYamlFile:
     def with_mongo(self) -> "DockerComposeExtrasYamlFile":
         services = self._services.get("services", {})
 
+        mongodb_service = MongoDbExtraService()
         self._services = {
             **services,
-            **MongoDbExtraService().data,
+            **{"mongodb": mongodb_service.data},
         }
         return self

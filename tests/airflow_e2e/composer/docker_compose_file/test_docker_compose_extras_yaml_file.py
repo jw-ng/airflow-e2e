@@ -19,7 +19,12 @@ class TestDockerComposeExtrasYamlFile:
     def test_data_should_return_only_mongod_service_when_with_mongo(self):
         yaml_file = DockerComposeExtrasYamlFile().with_mongo()
 
-        assert yaml_file.data.get("services") == MongoDbExtraService().data
+        mongodb_extra_service = MongoDbExtraService()
+
+        assert (
+            yaml_file.data.get("services").get("mongodb")
+            == mongodb_extra_service.data
+        )
 
     @pytest.mark.parametrize(
         "yaml_file",

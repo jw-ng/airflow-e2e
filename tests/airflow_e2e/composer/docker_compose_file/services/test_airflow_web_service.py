@@ -1,11 +1,13 @@
-from airflow_e2e.composer.docker_compose_file.services.airflow_web_service import AirflowWebService
+from airflow_e2e.composer.docker_compose_file.services.airflow_web_service import (
+    AirflowWebService,
+)
 
 
-def test_should_return_correct_airflow_web_service_settings():
-    service = AirflowWebService()
+class TestAirflowWebService:
+    def test_should_return_correct_airflow_web_service_settings(self):
+        service = AirflowWebService()
 
-    assert service.data == {
-        "airflow-web": {
+        assert service.data == {
             "container_name": "airflow-web",
             "image": "bitnami/airflow:latest",
             "depends_on": [
@@ -38,14 +40,13 @@ def test_should_return_correct_airflow_web_service_settings():
                 "retries": 15,
             },
         }
-    }
 
+    def test_should_return_airflow_web_service_with_requirements_txt_mount_when_with_custom_airflow_packages(
+        self,
+    ):
+        service = AirflowWebService().with_custom_airflow_packages()
 
-def test_should_return_airflow_web_service_with_requirements_txt_mount_when_with_custom_airflow_packages():
-    service = AirflowWebService().with_custom_airflow_packages()
-
-    assert service.data == {
-        "airflow-web": {
+        assert service.data == {
             "container_name": "airflow-web",
             "image": "bitnami/airflow:latest",
             "depends_on": [
@@ -79,4 +80,3 @@ def test_should_return_airflow_web_service_with_requirements_txt_mount_when_with
                 "retries": 15,
             },
         }
-    }

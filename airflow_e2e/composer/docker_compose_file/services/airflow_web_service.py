@@ -5,7 +5,8 @@ from airflow_e2e.composer.docker_compose_file.services.base_service import BaseS
 
 class AirflowWebService(BaseService):
     def __init__(self):
-        self._data = {
+        self._volumes = []
+        self._base_data = {
             "container_name": "airflow-web",
             "image": "bitnami/airflow:latest",
             "depends_on": [
@@ -39,15 +40,14 @@ class AirflowWebService(BaseService):
             },
         }
 
-    def with_custom_airflow_packages(self) -> "AirflowWebService":
-        self._data = {
-            **self._data,
-            **{
-                "volumes": ["../requirements.txt:/bitnami/python/requirements.txt"],
-            },
-        }
-        return self
-
     @property
     def data(self) -> typing.Dict:
-        return {"airflow-web": self._data}
+        return (
+            {**self._base_data, **{"volumes": self._volumes}}
+            if self._volumes
+            else self._base_data
+        )
+
+    def with_custom_airflow_packages(self) -> "AirflowWebService":
+        self._volumes += ["../requirements.txt:/bitnami/python/requirements.txt"]
+        return self

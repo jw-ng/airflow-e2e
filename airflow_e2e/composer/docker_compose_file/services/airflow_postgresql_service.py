@@ -4,9 +4,10 @@ from airflow_e2e.composer.docker_compose_file.services.base_service import BaseS
 
 
 class AirflowPostgresqlService(BaseService):
-    def __init__(self):
-        self._data = {
-            "container_name": "postgresql",
+    @property
+    def data(self) -> typing.Dict:
+        return {
+            "container_name": "airflow-postgresql",
             "image": "bitnami/postgresql:latest",
             "environment": [
                 "POSTGRESQL_DATABASE=${AIRFLOW_DATABASE_NAME}",
@@ -16,7 +17,3 @@ class AirflowPostgresqlService(BaseService):
             ],
             "ports": ["5432:5432"],
         }
-
-    @property
-    def data(self) -> typing.Dict:
-        return {"postgresql": self._data}
