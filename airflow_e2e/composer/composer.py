@@ -2,14 +2,14 @@ from pathlib import Path
 
 from airflow_e2e.builder.builder import (
     build_airflow_core_services_composer,
-    build_e2e_test_runner_service_composer, build_extra_services_composer,
+    build_e2e_test_runner_service_composer,
+    build_extra_services_composer,
 )
 from airflow_e2e.composer.airflow_seeder_service_composer import (
     AirflowSeederServiceComposer,
 )
 from airflow_e2e.composer.constants import DOCKER_FOLDER_NAME
 from airflow_e2e.composer.envrc_file_writer import EnvrcFileWriter
-from airflow_e2e.composer.extra_services_composer import ExtraServicesComposer
 from airflow_e2e.composer.manual_e2e_test_runner_service_composer import (
     ManualE2eTestRunnerServiceComposer,
 )
