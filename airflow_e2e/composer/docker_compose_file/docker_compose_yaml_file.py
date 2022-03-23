@@ -2,8 +2,15 @@ import typing
 
 import yaml
 
-from airflow_e2e.composer.docker_compose_file.docker_compose_version import (
-    DOCKER_COMPOSE_VERSION,
+from airflow_e2e.composer.docker_compose_file.constants import (
+    AIRFLOW_SCHEDULER_SERVICE_NAME,
+    AIRFLOW_WEB_SERVICE_NAME,
+    AIRFLOW_WORKER_SERVICE_NAME,
+    POSTGRESQL_SERVICE_NAME,
+    REDIS_SERVICE_NAME,
+    SERVICES,
+    VERSION,
+    VERSION_3_7,
 )
 from airflow_e2e.composer.docker_compose_file.services.airflow_postgresql_service import (
     AirflowPostgresqlService,
@@ -24,24 +31,23 @@ from airflow_e2e.composer.docker_compose_file.services.airflow_worker_service im
 
 class DockerComposeYamlFile:
     def __init__(self, dags_folder: str):
-        self._version = DOCKER_COMPOSE_VERSION
         self._services = {
-            "airflow-web": AirflowWebService(),
-            "airflow-scheduler": AirflowSchedulerService(dags_folder=dags_folder),
-            "airflow-worker": AirflowWorkerService(dags_folder=dags_folder),
-            "postgresql": AirflowPostgresqlService(),
-            "redis": AirflowRedisService(),
+            AIRFLOW_WEB_SERVICE_NAME: AirflowWebService(),
+            AIRFLOW_SCHEDULER_SERVICE_NAME: AirflowSchedulerService(
+                dags_folder=dags_folder
+            ),
+            AIRFLOW_WORKER_SERVICE_NAME: AirflowWorkerService(dags_folder=dags_folder),
+            POSTGRESQL_SERVICE_NAME: AirflowPostgresqlService(),
+            REDIS_SERVICE_NAME: AirflowRedisService(),
         }
 
     @property
     def data(self) -> typing.Dict:
         return {
-            **self._version,
-            **{
-                "services": {
-                    service_name: service.data
-                    for service_name, service in self._services.items()
-                }
+            VERSION: VERSION_3_7,
+            SERVICES: {
+                service_name: service.data
+                for service_name, service in self._services.items()
             },
         }
 
@@ -50,17 +56,17 @@ class DockerComposeYamlFile:
         return yaml.safe_dump(self.data, sort_keys=False)
 
     def with_custom_airflow_packages(self) -> "DockerComposeYamlFile":
-        airflow_web_service = self._services.get("airflow-web")
-        airflow_scheduler_service = self._services.get("airflow-scheduler")
-        airflow_worker_service = self._services.get("airflow-worker")
+        airflow_web_service = self._services.get(AIRFLOW_WEB_SERVICE_NAME)
+        airflow_scheduler_service = self._services.get(AIRFLOW_SCHEDULER_SERVICE_NAME)
+        airflow_worker_service = self._services.get(AIRFLOW_WORKER_SERVICE_NAME)
 
         self._services = {
             **self._services,
             **{
-                "airflow-web": airflow_web_service.with_custom_airflow_packages(),
-                "airflow-scheduler": airflow_scheduler_service.with_custom_airflow_packages(),
-                "airflow-worker": airflow_worker_service.with_custom_airflow_packages(),
-            }
+                AIRFLOW_WEB_SERVICE_NAME: airflow_web_service.with_custom_airflow_packages(),
+                AIRFLOW_SCHEDULER_SERVICE_NAME: airflow_scheduler_service.with_custom_airflow_packages(),
+                AIRFLOW_WORKER_SERVICE_NAME: airflow_worker_service.with_custom_airflow_packages(),
+            },
         }
 
         return self

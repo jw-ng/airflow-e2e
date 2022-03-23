@@ -1,7 +1,5 @@
 from unittest.mock import call
 
-import pytest as pytest
-
 from airflow_e2e.composer.docker_compose_file.docker_compose_manual_testing_yaml_file import (
     DockerComposeManualTestingYamlFile,
 )

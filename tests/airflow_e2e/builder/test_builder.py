@@ -1,11 +1,8 @@
-from pathlib import Path
-
 from airflow_e2e.builder.builder import (
     build_airflow_core_services_composer,
     build_e2e_test_runner_service_composer,
     build_extra_services_composer,
 )
-from airflow_e2e.composer.constants import TEMPLATES_DIR_PATH
 from airflow_e2e.composer.docker_compose_file.docker_compose_tests_yaml_file import (
     DockerComposeTestsYamlFile,
 )
