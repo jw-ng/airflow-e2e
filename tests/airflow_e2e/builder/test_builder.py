@@ -6,6 +6,12 @@ from airflow_e2e.builder.builder import (
     build_extra_services_composer,
 )
 from airflow_e2e.composer.constants import TEMPLATES_DIR_PATH
+from airflow_e2e.composer.docker_compose_file.docker_compose_tests_yaml_file import (
+    DockerComposeTestsYamlFile,
+)
+from airflow_e2e.composer.docker_compose_file.docker_compose_yaml_file import (
+    DockerComposeYamlFile,
+)
 
 
 def test_build_airflow_core_services_composer_should_return_airflow_core_services_composer_without_custom_installation_when_with_custom_airflow_packages_is_false():
@@ -14,8 +20,8 @@ def test_build_airflow_core_services_composer_should_return_airflow_core_service
     )
 
     assert (
-        composer.template_file_path
-        == Path(TEMPLATES_DIR_PATH) / "docker-compose.yml.template"
+        composer.yaml_file.data
+        == DockerComposeYamlFile(dags_folder="some/dags/folder").data
     )
 
 
@@ -25,8 +31,10 @@ def test_build_airflow_core_services_composer_should_return_airflow_core_service
     )
 
     assert (
-        composer.template_file_path
-        == Path(TEMPLATES_DIR_PATH) / "docker-compose.yml_without_requirements.template"
+        composer.yaml_file.data
+        == DockerComposeYamlFile(dags_folder="some/dags/folder")
+        .with_custom_airflow_packages()
+        .data
     )
 
 
@@ -38,8 +46,11 @@ def test_build_e2e_test_runner_service_composer_should_return_e2e_test_runner_se
     )
 
     assert (
-        composer.template_file_path
-        == Path(TEMPLATES_DIR_PATH) / "docker-compose-tests.yml.template"
+        composer.yaml_file.data
+        == DockerComposeTestsYamlFile(
+            dags_folder="some/dags/folder",
+            tests_folder="some/tests/folder",
+        ).data
     )
 
 
@@ -51,9 +62,13 @@ def test_build_e2e_test_runner_service_composer_should_return_e2e_test_runner_se
     )
 
     assert (
-        composer.template_file_path
-        == Path(TEMPLATES_DIR_PATH)
-        / "docker-compose-tests.yml_without_requirements_dev.template"
+        composer.yaml_file.data
+        == DockerComposeTestsYamlFile(
+            dags_folder="some/dags/folder",
+            tests_folder="some/tests/folder",
+        )
+        .with_custom_test_packages()
+        .data
     )
 
 
