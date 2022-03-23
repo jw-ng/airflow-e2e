@@ -100,6 +100,7 @@ def test_should_output_convenient_make_commands(mocker):
         "\t-f ./docker/docker-compose.yml \\\n"
         "\t-f ./docker/docker-compose-dev.yml \\\n"
         "\t-f ./docker/docker-compose-tests.yml \\\n"
+        "\t-f ./docker/docker-compose-extras.yml \\\n"
         "\tdown --remove-orphans --volumes\n"
         "\n"
         "dev: clean\n"
@@ -107,6 +108,7 @@ def test_should_output_convenient_make_commands(mocker):
         "\tdocker-compose \\\n"
         "\t-f ./docker/docker-compose.yml \\\n"
         "\t-f ./docker/docker-compose-dev.yml \\\n"
+        "\t-f ./docker/docker-compose-extras.yml \\\n"
         "\tup -d\n"
         "\n"
         "wait_for_airflow_web_to_be_healthy:\n"
@@ -123,6 +125,7 @@ def test_should_output_convenient_make_commands(mocker):
         "\tdocker-compose \\\n"
         "\t-f ./docker/docker-compose.yml \\\n"
         "\t-f ./docker/docker-compose-tests.yml \\\n"
+        "\t-f ./docker/docker-compose-extras.yml \\\n"
         "\tup --exit-code-from test-runner\n"
     )
 
