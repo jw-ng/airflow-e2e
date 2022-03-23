@@ -1,6 +1,4 @@
-import typing
 from pathlib import Path
-from string import Template
 
 from airflow_e2e.composer import copy_from_template
 from airflow_e2e.composer.constants import (
@@ -18,26 +16,22 @@ DOCKER_COMPOSE_YML_WITHOUT_REQUIREMENTS_TEMPLATE_FILE_NAME = (
 class AirflowCoreServicesComposer:
     def __init__(self, dags: str):
         self.substitutions = {DAGS_FOLDER_TEMPLATE_STRING: dags}
-
-    def setup(self, working_dir: Path):
-        template_file_path = TEMPLATES_DIR_PATH / DOCKER_COMPOSE_YML_TEMPLATE_FILE_NAME
-        output_file_path = working_dir / DOCKER_COMPOSE_YML_FILE_NAME
-
-        copy_from_template(
-            template_file_path=template_file_path,
-            output_file_path=output_file_path,
-            substitutions=self.substitutions,
+        self.template_file_path = (
+            TEMPLATES_DIR_PATH / DOCKER_COMPOSE_YML_TEMPLATE_FILE_NAME
         )
 
-    def setup_without_mount(self, working_dir: Path):
-        template_file_path = (
+    def with_custom_airflow_installation(self) -> "AirflowCoreServicesComposer":
+        self.template_file_path = (
             TEMPLATES_DIR_PATH
             / DOCKER_COMPOSE_YML_WITHOUT_REQUIREMENTS_TEMPLATE_FILE_NAME
         )
+        return self
+
+    def setup(self, working_dir: Path):
         output_file_path = working_dir / DOCKER_COMPOSE_YML_FILE_NAME
 
         copy_from_template(
-            template_file_path=template_file_path,
+            template_file_path=self.template_file_path,
             output_file_path=output_file_path,
             substitutions=self.substitutions,
         )

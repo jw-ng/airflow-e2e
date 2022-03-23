@@ -11,10 +11,12 @@ def main():
     args = parser.parse(sys.argv[1:])
 
     working_dir = os.getcwd()
-    if args.requirements:
-        composer.setup(dags=args.dags, tests=args.tests, working_dir=working_dir)
-    else:
-        composer.setup_without_requirements(dags=args.dags, tests=args.tests, working_dir=working_dir)
+    composer.setup(
+        dags=args.dags,
+        tests=args.tests,
+        working_dir=working_dir,
+        with_custom_airflow_installation=args.requirements,
+    )
 
     print_to_screen(f"Airflow E2E test scripts generated in '{working_dir}/docker/'\n")
     print_to_screen(CONVENIENT_MAKE_COMMANDS)

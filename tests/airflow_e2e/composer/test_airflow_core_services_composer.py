@@ -7,7 +7,7 @@ from airflow_e2e.composer.airflow_core_services_composer import (
 
 
 class TestAirflowCoreServicesComposer:
-    def test_should_create_docker_compose_yml_file_in_specified_working_directory(self):
+    def test_setup_should_create_docker_compose_yml_file_in_specified_working_directory(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             composer = AirflowCoreServicesComposer(dags="some/dags/folder")
 
@@ -16,7 +16,7 @@ class TestAirflowCoreServicesComposer:
             docker_compose_yml_file_path = Path(temp_dir) / "docker-compose.yml"
             assert docker_compose_yml_file_path.exists()
 
-    def test_should_setup_correct_dags_folder_in_docker_compose_yml_file(self):
+    def test_setup_should_setup_correct_dags_folder_in_docker_compose_yml_file(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             composer = AirflowCoreServicesComposer(dags="some/dags/folder")
 
@@ -36,13 +36,13 @@ class TestAirflowCoreServicesComposer:
 
             assert actual == expected
 
-    def test_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_not_needed(
+    def test_setup_should_omit_requirements_txt_mount_in_docker_compose_yml_file_when_with_custom_mount(
         self,
     ):
         with tempfile.TemporaryDirectory() as temp_dir:
-            composer = AirflowCoreServicesComposer(dags="some/dags/folder")
+            composer = AirflowCoreServicesComposer(dags="some/dags/folder").with_custom_airflow_installation()
 
-            composer.setup_without_mount(working_dir=Path(temp_dir))
+            composer.setup(working_dir=Path(temp_dir))
 
             docker_compose_yml_file_path = (
                 Path(temp_dir) / "docker-compose.yml"
