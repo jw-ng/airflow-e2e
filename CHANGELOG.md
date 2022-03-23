@@ -5,8 +5,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.0] - 2022-03-23
+
+### Added
 - Support not mounting requirements.txt file for Airflow services
 - Support not mounting requirements-dev.txt file for the test runner service
+- Support creation of a MongoDB service in Docker Compose cluster
 
 ## [0.1.1] - 2022-03-21
 
