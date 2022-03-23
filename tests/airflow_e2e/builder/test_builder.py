@@ -4,9 +4,9 @@ from airflow_e2e.builder.builder import build_airflow_core_services_composer
 from airflow_e2e.composer.constants import TEMPLATES_DIR_PATH
 
 
-def test_build_airflow_core_services_composer_should_return_airflow_core_services_composer_without_custom_mount_when_with_custom_airflow_installation_is_false():
+def test_build_airflow_core_services_composer_should_return_airflow_core_services_composer_without_custom_mount_when_with_custom_airflow_packages_is_false():
     composer = build_airflow_core_services_composer(
-        dags="some/dags/folder", with_custom_airflow_installation=False
+        dags="some/dags/folder", with_custom_airflow_packages=False
     )
 
     assert (
@@ -15,9 +15,9 @@ def test_build_airflow_core_services_composer_should_return_airflow_core_service
     )
 
 
-def test_build_airflow_core_services_composer_should_return_airflow_core_services_composer_with_custom_airflow_installation_when_with_custom_mount_is_true():
+def test_build_airflow_core_services_composer_should_return_airflow_core_services_composer_with_custom_airflow_packages_when_with_custom_mount_is_true():
     composer = build_airflow_core_services_composer(
-        dags="some/dags/folder", with_custom_airflow_installation=True
+        dags="some/dags/folder", with_custom_airflow_packages=True
     )
 
     assert (

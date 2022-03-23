@@ -39,7 +39,7 @@ airflow-e2e --dags dags/ --tests tests/e2e
 Alternatively, if you have packages to be installed in the Airflow services:
 
 ```shell
-airflow-e2e --dags dags/ --tests tests/e2e --requirements
+airflow-e2e --dags dags/ --tests tests/e2e --with-custom-airflow-packages
 ```
 
 This will generate a `docker` folder at the root of your repository, and it will

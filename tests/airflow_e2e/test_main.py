@@ -34,14 +34,16 @@ def test_should_parse_arguments_from_sys_argv(mocker):
     )
 
 
-@pytest.mark.parametrize("requirements_flag", [True, False])
-def test_should_setup_composer_with_correct_parameters(mocker, requirements_flag):
+@pytest.mark.parametrize("with_custom_airflow_packages_flag", [True, False])
+def test_should_setup_composer_with_correct_parameters(
+    mocker, with_custom_airflow_packages_flag
+):
     mocker.patch(
         "airflow_e2e.__main__.parser.parse",
         return_value=Namespace(
             dags="some/dags/folder",
             tests="some/tests/folder",
-            requirements=requirements_flag,
+            with_custom_airflow_packages=with_custom_airflow_packages_flag,
         ),
     )
     spy_setup = mocker.patch("airflow_e2e.__main__.composer.setup")
@@ -54,7 +56,7 @@ def test_should_setup_composer_with_correct_parameters(mocker, requirements_flag
         dags="some/dags/folder",
         tests="some/tests/folder",
         working_dir="ROOT_OF_REPO",
-        with_custom_airflow_installation=requirements_flag,
+        with_custom_airflow_packages=with_custom_airflow_packages_flag,
     )
 
 

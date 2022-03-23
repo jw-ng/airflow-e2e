@@ -21,7 +21,7 @@ def test_should_return_correct_namespace_containing_dags_and_tests_folder_when_s
     assert args == Namespace(
         dags="dags/",
         tests="tests/",
-        requirements=False,
+        with_custom_airflow_packages=False,
         test_requirements=False,
     )
 
@@ -29,13 +29,13 @@ def test_should_return_correct_namespace_containing_dags_and_tests_folder_when_s
 def test_should_default_to_false_when_requirements_argument_is_not_specified():
     args = parse(["--dags", "dags/", "--tests", "tests/"])
 
-    assert args.requirements is False
+    assert args.with_custom_airflow_packages is False
 
 
-def test_should_be_true_when_requirements_flag_is_present():
-    args = parse(["--dags", "dags/", "--tests", "tests/", "--requirements"])
+def test_should_be_true_when_with_custom_airflow_packages_flag_is_present():
+    args = parse(["--dags", "dags/", "--tests", "tests/", "--with-custom-airflow-packages"])
 
-    assert args.requirements is True
+    assert args.with_custom_airflow_packages is True
 
 
 def test_should_default_to_false_when_test_requirements_argument_is_not_specified():

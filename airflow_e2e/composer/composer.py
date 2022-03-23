@@ -18,14 +18,14 @@ def setup(
     dags: str,
     tests: str,
     working_dir: str,
-    with_custom_airflow_installation: bool,
+    with_custom_airflow_packages: bool,
 ):
     docker_folder_path = Path(working_dir) / DOCKER_FOLDER_NAME
     docker_folder_path.mkdir(parents=True, exist_ok=True)
 
     airflow_core_services_composer = build_airflow_core_services_composer(
         dags=dags,
-        with_custom_airflow_installation=with_custom_airflow_installation,
+        with_custom_airflow_packages=with_custom_airflow_packages,
     )
     airflow_core_services_composer.setup(working_dir=docker_folder_path)
 

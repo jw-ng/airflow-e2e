@@ -13,7 +13,7 @@ def test_should_create_docker_base_folder():
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
-            with_custom_airflow_installation=False,
+            with_custom_airflow_packages=False,
         )
 
         expected_docker_folder_path = Path(temp_dir) / "docker"
@@ -21,10 +21,10 @@ def test_should_create_docker_base_folder():
         assert expected_docker_folder_path.exists()
 
 
-@pytest.mark.parametrize(
-    "installation_flag", [True, False]
-)
-def test_setup_should_setup_airflow_core_services(mocker, installation_flag):
+@pytest.mark.parametrize("with_custom_airflow_packages_flag", [True, False])
+def test_setup_should_setup_airflow_core_services(
+    mocker, with_custom_airflow_packages_flag: bool
+):
     mock_composer_instance = MagicMock()
     spy_build = mocker.patch(
         "airflow_e2e.composer.composer.build_airflow_core_services_composer",
@@ -36,12 +36,13 @@ def test_setup_should_setup_airflow_core_services(mocker, installation_flag):
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
-            with_custom_airflow_installation=installation_flag,
+            with_custom_airflow_packages=with_custom_airflow_packages_flag,
         )
 
         assert spy_build.call_count == 1
         assert spy_build.call_args == call(
-            dags="some/dags/folder", with_custom_airflow_installation=installation_flag,
+            dags="some/dags/folder",
+            with_custom_airflow_packages=with_custom_airflow_packages_flag,
         )
 
         assert mock_composer_instance.setup.call_count == 1
@@ -62,7 +63,7 @@ def test_setup_should_setup_e2e_test_runner_service(mocker):
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
-            with_custom_airflow_installation=False,
+            with_custom_airflow_packages=False,
         )
 
         assert spy_composer.call_count == 1
@@ -89,7 +90,7 @@ def test_setup_should_setup_airflow_seeder_service_composer(mocker):
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
-            with_custom_airflow_installation=False,
+            with_custom_airflow_packages=False,
         )
 
         assert spy_composer.call_count == 1
@@ -113,7 +114,7 @@ def test_setup_should_setup_manual_e2e_test_runner_service_composer(mocker):
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
-            with_custom_airflow_installation=False,
+            with_custom_airflow_packages=False,
         )
 
         assert spy_composer.call_count == 1
@@ -137,7 +138,7 @@ def test_setup_should_setup_envrc_file_writer(mocker):
             dags="some/dags/folder",
             tests="some/tests/folder",
             working_dir=temp_dir,
-            with_custom_airflow_installation=False,
+            with_custom_airflow_packages=False,
         )
 
         assert spy_writer.call_count == 1

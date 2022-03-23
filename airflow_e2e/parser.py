@@ -15,7 +15,7 @@ def parse(args: typing.List[str]) -> argparse.Namespace:
         help="E2E test suite folder path, relative from the root of the repository",
     )
     parser.add_argument(
-        "--requirements",
+        "--with-custom-airflow-packages",
         required=False,
         action="store_true",
         help="Indicate if a requirements.txt file is to be mounted for the Airflow services",
