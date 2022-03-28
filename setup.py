@@ -8,7 +8,7 @@ README = (REPO_ROOT_DIR_PATH / "README.md").read_text()
 
 setup(
     name="airflow-e2e",
-    version="0.2.1",
+    version="0.2.2",
     description="Create E2E test scripts for Airflow DAGs testing",
     long_description=README,
     long_description_content_type="text/markdown",
